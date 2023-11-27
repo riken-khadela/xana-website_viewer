@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer for Your Python Script
+
+[Timer]
+OnBootSec=0
+OnUnitActiveSec=4h
+
+[Install]
+WantedBy=timers.target

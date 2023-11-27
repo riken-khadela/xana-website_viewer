@@ -207,45 +207,66 @@ def connect_turbo(driver):
 
 def run_some_random_activity(driver):
     print('running some random activities')
+
     windows = driver.window_handles
 
     for i in windows : 
             driver.switch_to.window(i)
             if 'xana' not in driver.current_url : driver.close()
-        
-    for i in range(random.randint(2,7)):
-        az = driver.find_elements(By.XPATH,'/html/body/div[4]/div/main/div[1]/div/div/aside/div/div[2]/div//*')
-        az = driver.find_elements(By.XPATH,'//a[@class="cs-overlay-link"]') # rel="noreferrer"
-        for _ in range(1,len(az)-1):
-            try :
-                az[random.randint(1,len(az)-1)].click()
-                break
-            except : ...
+    try: driver.execute_script('document.querySelector("body > div.fade.modal.show").click()')
+    except : ...
+    # document.querySelector("body > div.fade.modal.show").click()
+    randomnumberrr = random.randint(2,7)
+    done_activity_nunber = 0
+    while randomnumberrr != done_activity_nunber :
         driver.switch_to.window(driver.window_handles[-1])
-        driver.current_url 
-    ...    
+        try :
+            aa = driver.find_elements(By.TAG_NAME,'a')
+            hreff_li = []
+            for i in aa : 
+                hreff = i.get_attribute('href')
+                if hreff != None and 'xana.net/' in hreff :
+                    hreff_li.append(aa.index(i))
+
+            if len(hreff_li) > 0 :
+                a_tag_index = random.choice(hreff_li)
+                aa[a_tag_index].click()
+            done_activity_nunber += 1
+            random_sleep(20,30)
+        except : ...
+        # az = driver.find_elements(By.XPATH,'//*[@id="eventDiv"]/div/*')
+        # if len(az) > 2 : 
+        #     az_a_tag = az[1].find_elements(By.TAG_NAME,'a')
+        #     if len(az_a_tag) != 0 :
+        #         az_a_tag[0].click()
+
+        random_sleep()
+
 def work():
-        print(1111)
-        logging.info('open selenium driver')
-        method = random.randint(1,5)
         try:
+            
+            logging.info('open selenium driver')
+            method = random.randint(1,5)
+            method = 1
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument("--remote-debugging-port=9222")
             if method ==1:
-                chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_touchvpn(driver)
+                
                 driver.get('https://xana.net/app')
 
                 
             elif method == 2:
-                chrome_options = webdriver.ChromeOptions()
+                # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_turbo(driver)
                 driver.get('https://xana.net/app')
                 
             elif method ==3:
-                chrome_options = webdriver.ChromeOptions()
+                # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./cyberghost.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_cyberghost_vpn(driver)
@@ -276,17 +297,28 @@ def work():
                 time.sleep(2)
                 click_element(driver,'//*[@id="crisp-chatbox"]/div/a')
             time.sleep(10)
-            load_more = find_elements(driver,'//button[text()="Load More"]')[-1]
-            driver.execute_script("arguments[0].scrollIntoViewIfNeeded();", load_more)
-            time.sleep(1)
-            load_more.click()
+            print(111)
+            try:
+                load_more = find_elements(driver,'//button[text()="Load More"]')[-1]
+                driver.execute_script("arguments[0].scrollIntoViewIfNeeded();", load_more)
+            except : ...
+            # time.sleep(1)
+            # print(222)
+
+            # # load_more.click()
+            # print(333)
 
             xpaths = [f'//*[@id="__next"]/div[3]/div[2]/div/div[5]/div[2]/div[{random.randint(1,4)}]', f'//*[@id="__next"]/div[3]/div[2]/div/div[10]/div[2]/div[{random.randint(1,4)}]']
             ele = find_element(driver,random.choice(xpaths),timeout=1)
-            find = find_element(driver,'#overlay > div > div:nth-child(4) > a > h2 > button',By.CSS_SELECTOR)
             click_popup(driver,ele)
-            for i in range(3): driver.execute_script("window.scrollBy(0, 1000);")
+            for i in range(3): 
+                driver.execute_script("window.scrollBy(0, 1000);")
+                random_sleep()
             time.sleep(20)
+            
+            
+            
+
             windows = driver.window_handles
             for i in windows : 
                 driver.switch_to.window(i)
@@ -294,9 +326,8 @@ def work():
             
             for _ in range(random.randint(2,7)):
                 run_some_random_activity(driver)
-        except : ...
+        except Exception as e: print(e) 
         driver.quit()
-
     
 threads = 10
 # while True:
@@ -306,7 +337,7 @@ threads = 10
 import concurrent.futures
 
 def main():
-    num_threads = 10
+    num_threads = 2
     active_threads = set()
 
     def start_new_thread():
