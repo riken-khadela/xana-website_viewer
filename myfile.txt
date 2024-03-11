@@ -1,9 +1,0 @@
-Today : 2023-10-27 14:39:56.907237 
-Today : 2023-10-30 11:24:54.760969 
-Today : 2023-10-30 11:26:34.919919 
-Today : 2023-10-30 11:28:01.559247 
-Today : 2023-10-30 11:28:15.093274 
-Today : 2023-10-31 10:45:01.182621 
-Today : 2023-10-31 10:45:20.437615 
-Today : 2023-10-31 10:45:56.059688 
-source /home/dell/workspace2/website_viewer/env/bin/activate /home/dell/workspace2/website_viewer/shtest.py

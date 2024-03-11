@@ -246,10 +246,11 @@ def work():
         try:
             
             logging.info('open selenium driver')
-            method = random.randint(1,5)
+            method = random.randint(1,3)
             method = 1
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument("--remote-debugging-port=9222")
+            # chrome_options.add_argument("--remote-debugging-port=9222")
+            breakpoint()
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                 driver = webdriver.Chrome(options=chrome_options)
@@ -292,7 +293,7 @@ def work():
             # driver.execute_script(f"window.open('{random.choice(urls)}')")
             # driver.switch_to.window(driver.window_handles[-1])
             time.sleep(1)
-            click_element(driver,'//*[@id="__next"]/div[3]/div[2]/div/div[1]/nav/div[1]/div[1]')
+            find_element(driver,'//*[@id="__next"]/div[3]/div[2]/div/div[1]/nav/div[1]/div[1]')
             for i in range(2):
                 time.sleep(2)
                 click_element(driver,'//*[@id="crisp-chatbox"]/div/a')
@@ -337,7 +338,7 @@ threads = 10
 import concurrent.futures
 
 def main():
-    num_threads = 2
+    num_threads = 1
     active_threads = set()
 
     def start_new_thread():
