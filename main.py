@@ -1,18 +1,10 @@
-import os,shutil, pandas as pd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException,ElementNotInteractableException,NoSuchElementException,WebDriverException
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver  
-from collections import defaultdict
-import requests
-from dateutil import parser
-import json, random, time, pandas as pd, os
-from datetime import datetime, timedelta
-import undetected_chromedriver as uc
-import urllib.request
-from driver import open_vps_driver
+import json, random, time, os, shutil
 import logging
 from selenium import webdriver
 
@@ -25,62 +17,21 @@ class scrapping_bot():
         self.base_path = os.getcwd()
 
     def driver_arguments(self):
-        self.options.add_argument('--lang=en')  
-        self.options.add_argument('--mute-audio') 
-        self.options.add_argument("--enable-webgl-draft-extensions")
-        self.options.add_argument('--mute-audio')
-        self.options.add_argument("--ignore-gpu-blocklist")
-        self.options.add_argument('--disable-dev-shm-usage')
+        ...
+        # self.options.add_argument('--lang=en')  
+        # self.options.add_argument('--mute-audio') 
+        # self.options.add_argument("--enable-webgl-draft-extensions")
+        # self.options.add_argument("--ignore-gpu-blocklist")
         # self.options.add_argument('--headless')
 
-        prefs = {"credentials_enable_service": True,
-                'profile.default_content_setting_values.automatic_downloads': 1,
-                # "download.default_directory" : f"{self.download_path}",
-            'download.prompt_for_download': False, 
-            'download.directory_upgrade': True,
-            'safebrowsing.enabled': True ,
-            "profile.password_manager_enabled": True}
-        self.options.add_experimental_option("prefs", prefs)
-        self.options.add_argument('--no-sandbox')
-        self.options.add_argument('--start-maximized')    
-        self.options.add_argument('--disable-dev-shm-usage')
-        self.options.add_argument("--ignore-certificate-errors")
-        self.options.add_argument("--enable-javascript")
-        self.options.add_argument("--enable-popup-blocking")
+        # self.options.add_argument('--no-sandbox')
+        # self.options.add_argument('--start-maximized')    
+        # self.options.add_argument('--disable-dev-shm-usage')
+        # self.options.add_argument("--ignore-certificate-errors")
+        # self.options.add_argument("--enable-javascript")
+        # self.options.add_argument("--enable-popup-blocking")
 
     
-    def get_driver(self):
-        self.get_local_driver()
-        return
-        
-        for _ in range(30):
-            from undetected_chromedriver import Chrome, ChromeOptions
-
-            """Start webdriver and return state of it."""
-            self.options = ChromeOptions()
-            self.driver_arguments()
-            self.options.add_argument('--headless')
-            
-            try:
-                self.self.driver = Chrome(options=self.options,version_main=119)
-                break
-            except Exception as e:
-                print(f"Error: {e}")
-        
-        return self.driver
-
-    def get_local_driver(self):
-        """Start webdriver and return state of it."""
-        try:
-            self.self.driver = webdriver.Chrome(options=self.options)
-        except Exception as e:
-            print(e)
-        
-        return self.driver
-    
-    
-    
-      
     def delete_cache_folder(self,folder_path):
         if os.path.exists(folder_path):
             shutil.rmtree(folder_path)
@@ -313,6 +264,8 @@ class scrapping_bot():
                         
                 done_activity_nunber += 1
                 self.random_sleep(20,30)
+                if done_activity_nunber %2 == 0 : 
+                    self.driver.get('https://xana.net/app')
             except : ...
             self.random_sleep()
 
@@ -324,26 +277,28 @@ class scrapping_bot():
         try:
             logging.info('open selenium driver')
             method = random.randint(1,3)
-            self.driver_arguments()
+            method = 1
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument("--remote-debugging-port=9222")
             if method ==1:
-                self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-                self.driver = webdriver.Chrome(options=self.options)
+                chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
+                self.driver = webdriver.Chrome(options=chrome_options)
                 self.connect_touchvpn()
                 
                 self.driver.get('https://xana.net/app')
 
                 
             elif method == 2:
-                # self.options = webdriver.ChromeOptions()
-                self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
-                self.driver = webdriver.Chrome(options=self.options)
+                # chrome_options = webdriver.ChromeOptions()
+                chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
+                self.driver = webdriver.Chrome(options=chrome_options)
                 self.connect_turbo()
                 self.driver.get('https://xana.net/app')
                 
             elif method ==3:
-                # self.options = webdriver.ChromeOptions()
-                self.options.add_extension(r'./cyberghost.crx')
-                self.driver = webdriver.Chrome(options=self.options)
+                # chrome_options = webdriver.ChromeOptions()
+                chrome_options.add_extension(r'./cyberghost.crx')
+                self.driver = webdriver.Chrome(options=chrome_options)
                 self.connect_cyberghost_vpn()
                 self.driver.get('https://xana.net/app')
                 # driver.get('xana.net')
@@ -376,12 +331,11 @@ class scrapping_bot():
         
         
     
-threads = 10
+num_threads = 10
 
 import concurrent.futures
 
 def main():
-    num_threads = 1
     active_threads = set()
     cll = scrapping_bot()
     def start_new_thread():
