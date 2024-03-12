@@ -244,12 +244,10 @@ def work():
             method = 1
             chrome_options = webdriver.ChromeOptions()
             # chrome_options.add_argument("--remote-debugging-port=9222")
-            service = Service(ChromeDriverManager().install())
-            service = Service(executable="chromedriver")
 
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-                driver = webdriver.Chrome(service=service, options=chrome_options)
+                driver = webdriver.Chrome( options=chrome_options)
                 connect_touchvpn(driver)
                 
                 driver.get('https://xana.net/app')
@@ -258,14 +256,14 @@ def work():
             elif method == 2:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
-                driver = webdriver.Chrome(service=service,options=chrome_options)
+                driver = webdriver.Chrome(options=chrome_options)
                 connect_turbo(driver)
                 driver.get('https://xana.net/app')
                 
             elif method ==3:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./cyberghost.crx')
-                driver = webdriver.Chrome(service=service,options=chrome_options)
+                driver = webdriver.Chrome(options=chrome_options)
                 connect_cyberghost_vpn(driver)
                 driver.get('https://xana.net/app')
                 # driver.get('xana.net')
