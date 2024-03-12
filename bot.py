@@ -245,6 +245,7 @@ def work():
             chrome_options = webdriver.ChromeOptions()
             # chrome_options.add_argument("--remote-debugging-port=9222")
             service = Service(ChromeDriverManager().install())
+            service = Service(executable="chromedriver")
 
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
