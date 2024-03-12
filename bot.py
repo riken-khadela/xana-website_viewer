@@ -10,6 +10,7 @@ from selenium.webdriver.common.service import Service
 from selenium import webdriver
 from concurrent.futures import ThreadPoolExecutor, wait
 import logging
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def find_element(driver,xpath,locator=By.XPATH,timeout=10):
@@ -237,15 +238,17 @@ def run_some_random_activity(driver):
 
 def work():
         try:
-            
+
             logging.info('open selenium driver')
             method = random.randint(1,3)
             method = 1
             chrome_options = webdriver.ChromeOptions()
             # chrome_options.add_argument("--remote-debugging-port=9222")
+            service = Service(ChromeDriverManager().install())
+
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-                driver = webdriver.Chrome(options=chrome_options)
+                driver = webdriver.Chrome(service=service, options=chrome_options)
                 connect_touchvpn(driver)
                 
                 driver.get('https://xana.net/app')
@@ -254,21 +257,21 @@ def work():
             elif method == 2:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
-                driver = webdriver.Chrome(options=chrome_options)
+                driver = webdriver.Chrome(service=service,options=chrome_options)
                 connect_turbo(driver)
                 driver.get('https://xana.net/app')
                 
             elif method ==3:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./cyberghost.crx')
-                driver = webdriver.Chrome(options=chrome_options)
+                driver = webdriver.Chrome(service=service,options=chrome_options)
                 connect_cyberghost_vpn(driver)
                 driver.get('https://xana.net/app')
                 # driver.get('xana.net')
                 
             elif method == 4:
                 return
-                # driver = webdriver.Chrome()
+                # driver = webdriver.Chrome(service=service,)
                 # driver.get('https://www.blockaway.net/')
                 # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
                 # text_box.send_keys('https://xana.net/app')
@@ -276,7 +279,7 @@ def work():
                 
             elif method ==5:
                 return
-                # driver = webdriver.Chrome()
+                # driver = webdriver.Chrome(service=service,)
                 # driver.get('https://www.croxyproxy.net/')
                 # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
                 # text_box.send_keys('https://xana.net/app')
