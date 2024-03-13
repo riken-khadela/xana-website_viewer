@@ -279,7 +279,7 @@ class scrapping_bot():
             method = random.randint(1,3)
             method = 1
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument("--remote-debugging-port=9222")
+            # chrome_options.add_argument("--remote-debugging-port=9222")
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                 self.driver = webdriver.Chrome(options=chrome_options)
@@ -318,6 +318,8 @@ class scrapping_bot():
                 # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
                 # text_box.send_keys('https://xana.net/app')
                 # text_box.send_keys(Keys.RETURN)
+                
+            
             
             windows = self.driver.window_handles
             for i in windows : 

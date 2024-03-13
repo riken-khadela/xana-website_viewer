@@ -210,7 +210,7 @@ def run_some_random_activity(driver):
     print('running some random activities')
     try: driver.execute_script('document.querySelector("body > div.fade.modal.show").click()')
     except : ...
-    randomnumberrr = random.randint(2,7)
+    randomnumberrr = 2
     done_activity_nunber = 0
     while randomnumberrr != done_activity_nunber :
         driver.switch_to.window(driver.window_handles[-1])
@@ -227,15 +227,16 @@ def run_some_random_activity(driver):
                 if not "xana" in driver.current_url :
                     driver.get('https://xana.net/app')
                 
-                random_sleep()
                     
+                random_sleep()
             done_activity_nunber += 1
-            random_sleep(20,30)
             if done_activity_nunber %2 == 0 : 
                 driver.get('https://xana.net/app')
         except : ...
         random_sleep()
 
+def search_xana(driver):
+    breakpoint()
 def work():
         try:
 
@@ -250,7 +251,7 @@ def work():
                 driver = webdriver.Chrome( options=chrome_options)
                 connect_touchvpn(driver)
                 
-                driver.get('https://xana.net/app')
+                driver.get('https://www.google.com')
 
                 
             elif method == 2:
@@ -258,14 +259,14 @@ def work():
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_turbo(driver)
-                driver.get('https://xana.net/app')
+                driver.get('https://www.google.com')
                 
             elif method ==3:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./cyberghost.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_cyberghost_vpn(driver)
-                driver.get('https://xana.net/app')
+                driver.get('https://www.google.com')
                 # driver.get('xana.net')
                 
             elif method == 4:
@@ -286,20 +287,18 @@ def work():
             
             # driver.execute_script(f"window.open('{random.choice(urls)}')")
             # driver.switch_to.window(driver.window_handles[-1])
-           
             
-
+            
             windows = driver.window_handles
             for i in windows : 
                 driver.switch_to.window(i)
                 if 'xana' not in driver.current_url : driver.close()
             
-            for _ in range(random.randint(2,7)):
-                run_some_random_activity(driver)
+            run_some_random_activity(driver)
         except Exception as e: print(e) 
         driver.quit()
     
-threads = 10
+num_threads = 1
 # while True:
 #     with ThreadPoolExecutor(max_workers=threads) as executor:
 #         futures = [executor.submit(work) for _ in range(threads)]
@@ -307,7 +306,6 @@ threads = 10
 import concurrent.futures
 
 def main():
-    num_threads = 10
     active_threads = set()
 
     def start_new_thread():
