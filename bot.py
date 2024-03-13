@@ -208,8 +208,6 @@ def connect_turbo(driver):
 
 def run_some_random_activity(driver):
     print('running some random activities')
-    try: driver.execute_script('document.querySelector("body > div.fade.modal.show").click()')
-    except : ...
     randomnumberrr = 2
     done_activity_nunber = 0
     while randomnumberrr != done_activity_nunber :
@@ -224,8 +222,8 @@ def run_some_random_activity(driver):
                         a_ele.click()
                         break
                     except : ...
-                if not "xana" in driver.current_url :
-                    driver.get('https://xana.net/app')
+                if not "xana.net" in driver.current_url :
+                    driver.get('https://xana.net')
                 
                     
                 random_sleep()
@@ -288,11 +286,11 @@ def work():
             # driver.execute_script(f"window.open('{random.choice(urls)}')")
             # driver.switch_to.window(driver.window_handles[-1])
             
-            
+            driver.get('https://xana.net')
             windows = driver.window_handles
             for i in windows : 
                 driver.switch_to.window(i)
-                if 'xana' not in driver.current_url : driver.close()
+                if 'xana.net' not in driver.current_url : driver.close()
             
             run_some_random_activity(driver)
         except Exception as e: print(e) 
