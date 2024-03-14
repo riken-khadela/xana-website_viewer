@@ -101,6 +101,7 @@ def getvalue_byscript(driver,script = '',reason=''):
         value = driver.execute_script(f'return {script}')  
         return value
 def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
+    
     vpn_country_list = ['Romania','Netherlands','United States']
     vpn_country = random.choice(vpn_country_list)
     for  _ in range(3):
@@ -145,34 +146,36 @@ def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
         return
 
 def connect_touchvpn(driver):
-    driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
-    time.sleep(2)
-    time.sleep(3)
-    country = ['Singapore','Germany','United Kingdom','United States']
-    country = random.choice(country)
-    time.sleep(1)
-    window_handles = driver.window_handles
-    time.sleep(1)
-    driver.switch_to.window(window_handles[0])
-    time.sleep(1)
-    driver.find_element(By.XPATH,'//*[@class="location"]').click()
-    time.sleep(3)
-    locations = driver.find_element(By.XPATH,'//*[@class="list"]')
-    time.sleep(1)
-    location = locations.find_elements(By.XPATH,'//*[@class="row"]')
-    location[random.randint(0,7)].click()
-    time.sleep(2)
-    driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
-    wait = WebDriverWait(driver, 10)
     try:
-        wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="Stop"]')))
-    except Exception as e:
-        print(f"Error: {e}")
-    connected = driver.find_element(By.XPATH,'//*[text()="Stop"]')
-    if connected:
-        return True
-    else:
-        return False
+        driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
+        time.sleep(2)
+        time.sleep(3)
+        country = ['Singapore','Germany','United Kingdom','United States']
+        country = random.choice(country)
+        time.sleep(1)
+        window_handles = driver.window_handles
+        time.sleep(1)
+        driver.switch_to.window(window_handles[0])
+        time.sleep(1)
+        driver.find_element(By.XPATH,'//*[@class="location"]').click()
+        time.sleep(3)
+        locations = driver.find_element(By.XPATH,'//*[@class="list"]')
+        time.sleep(1)
+        location = locations.find_elements(By.XPATH,'//*[@class="row"]')
+        location[random.randint(0,7)].click()
+        time.sleep(2)
+        driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
+        wait = WebDriverWait(driver, 10)
+        try:
+            wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="Stop"]')))
+        except Exception as e:
+            print(f"Error: {e}")
+        connected = driver.find_element(By.XPATH,'//*[text()="Stop"]')
+        if connected:
+            return True
+        else:
+            return False
+    except : ...
         
 def connect_turbo(driver):    
     country = ['Singapore','Germany','United Kingdom','United States']
