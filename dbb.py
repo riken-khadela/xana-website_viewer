@@ -1,9 +1,8 @@
 import sqlite3
 from datetime import datetime, timedelta
 from maill import SendErrorMail
-# Specify the path to your database file
-db_file = 'db.db'
-SYSTEM_NO = "local"
+from variable import *
+
 
 
 def create_db_ifnot():
