@@ -303,7 +303,7 @@ def work():
         except Exception as e: print(e) 
         driver.quit()
     
-num_threads = 1
+num_threads = 10
 # while True:
 #     with ThreadPoolExecutor(max_workers=threads) as executor:
 #         futures = [executor.submit(work) for _ in range(threads)]
