@@ -11,7 +11,8 @@ from selenium import webdriver
 from concurrent.futures import ThreadPoolExecutor, wait
 import logging
 from webdriver_manager.chrome import ChromeDriverManager
-
+from dbb import create_db_ifnot,add_data_with_view, get_views_per_day
+from datetime import datetime
 
 def find_element(driver,xpath,locator=By.XPATH,timeout=10):
     wait = WebDriverWait(driver, timeout)
@@ -211,6 +212,10 @@ def connect_turbo(driver):
             return False
     except :...
 
+def driver_get_xana(driver):
+    driver.get('https://xana.net')
+    add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
+
 def run_some_random_activity(driver):
     print('running some random activities')
     randomnumberrr = 2
@@ -242,22 +247,18 @@ def search_xana(driver):
     breakpoint()
 def work():
         try:
-
             logging.info('open selenium driver')
             method = random.randint(1,3)
             # method = 1
             chrome_options = webdriver.ChromeOptions()
             breakpoint()
             # chrome_options.add_argument("--remote-debugging-port=9222")
-
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                 driver = webdriver.Chrome( options=chrome_options)
                 connect_touchvpn(driver)
-                
                 driver.get('https://xana.net')
 
-                
             elif method == 2:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
@@ -271,7 +272,6 @@ def work():
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_cyberghost_vpn(driver)
                 driver.get('https://xana.net')
-                # driver.get('xana.net')
                 
             elif method == 4:
                 """Not working"""
@@ -309,6 +309,7 @@ num_threads = 10
 #         futures = [executor.submit(work) for _ in range(threads)]
 
 import concurrent.futures
+create_db_ifnot()
 
 def main():
     active_threads = set()
@@ -332,4 +333,5 @@ def main():
                 active_threads.add(new_thread)
 
 if __name__ == "__main__":
+    
     main()
