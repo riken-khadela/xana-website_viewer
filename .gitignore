@@ -1,4 +1,4 @@
 env
-# etc
+etc
 *.log
 __pycache__
