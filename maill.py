@@ -7,18 +7,16 @@ from datetime import datetime
 from email.mime.text import MIMEText
 from email.utils import formatdate
 import pytz
-SYSTEM_NO = "local"
 
 SENDER_PASSWORD='hfac mvld ecjx clru'
 receiver_mail="rikenkhadelamain@gmail.com"
 sender_mail='rikenkhadela777@gmail.com'
-SYSTEM_NO='RK'
 
 class SendErrorMail:
-    def __init__(self, system_no=SYSTEM_NO, subject='This is an email sent from Webviwer bot', body=''):
-        self.send_email(subject, system_no, body)
+    def __init__(self): ...
 
     def send_email(self, subject, system_no, body):
+        breakpoint()
         add_line = ''
         if not system_no:
             try:
@@ -43,7 +41,7 @@ class SendErrorMail:
         body = body + f"\n\n{add_line}\nCurrent IST Time: {current_time}----------------------"
 
         message = MIMEText(body)
-        message["Subject"] = f'PC number: {system_no} {subject}'
+        message["Subject"] = f'PC number: {system_no}, "{subject}"'
         message["From"] = sender_email
         message["To"] = receiver_email
         message["Date"] = formatdate(localtime=True)
@@ -73,4 +71,4 @@ class SendErrorMail:
         return anydesk_id if anydesk_id and 'SERVICE_NOT_RUNNING' not in anydesk_id else None
 
 
-SendErrorMail(subject="test webview",body="this is a body of vebwiew")
+# SendErrorMail(subject="test webview",body="this is a body of vebwiew")

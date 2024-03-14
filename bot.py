@@ -11,7 +11,7 @@ from selenium import webdriver
 from concurrent.futures import ThreadPoolExecutor, wait
 import logging
 from webdriver_manager.chrome import ChromeDriverManager
-from dbb import create_db_ifnot,add_data_with_view, get_views_per_day
+from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, send_final_mail
 from datetime import datetime
 
 def find_element(driver,xpath,locator=By.XPATH,timeout=10):
@@ -215,6 +215,7 @@ def connect_turbo(driver):
 def driver_get_xana(driver):
     driver.get('https://xana.net')
     add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
+    send_final_mail()
 
 def run_some_random_activity(driver):
     print('running some random activities')
@@ -243,15 +244,12 @@ def run_some_random_activity(driver):
         except : ...
         random_sleep()
 
-def search_xana(driver):
-    breakpoint()
 def work():
         try:
             logging.info('open selenium driver')
             method = random.randint(1,3)
             # method = 1
             chrome_options = webdriver.ChromeOptions()
-            breakpoint()
             # chrome_options.add_argument("--remote-debugging-port=9222")
             if method ==1:
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
@@ -333,5 +331,6 @@ def main():
                 active_threads.add(new_thread)
 
 if __name__ == "__main__":
-    
+    from dbb import create_db_ifnot
+    create_db_ifnot()
     main()

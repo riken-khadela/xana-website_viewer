@@ -1,7 +1,10 @@
 import sqlite3
-
+from datetime import datetime, timedelta
+from maill import SendErrorMail
 # Specify the path to your database file
 db_file = 'db.db'
+SYSTEM_NO = "local"
+
 
 def create_db_ifnot():
     try:
@@ -26,6 +29,13 @@ def create_db_ifnot():
                 number INTEGER NOT NULL
             )
         ''')
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS sent_emails (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                sent_at TIMESTAMP NOT NULL
+            )
+        ''')
 
         # Create a trigger to automatically insert or update data in "attached_table" when a row is inserted into "main_table" with view set to true
         cursor.execute('''
@@ -33,16 +43,15 @@ def create_db_ifnot():
             AFTER INSERT ON main_table
             WHEN NEW.view = 1
             BEGIN
-                -- Check if a record with the same date already exists
-                DECLARE existing_count INTEGER;
-                SELECT COUNT(*) INTO existing_count FROM attached_table WHERE date = NEW.date;
+                -- Update the number column in attached_table if a record with the same date exists
+                UPDATE attached_table 
+                SET number = number + 1 
+                WHERE date = NEW.date;
 
-                -- If a record exists, increment the number column; otherwise, insert a new record
-                IF existing_count > 0 THEN
-                    UPDATE attached_table SET number = number + 1 WHERE date = NEW.date;
-                ELSE
-                    INSERT INTO attached_table (date, number) VALUES (NEW.date, 1);
-                END IF;
+                -- Insert a new record into attached_table if no record with the same date exists
+                INSERT INTO attached_table (date, number) 
+                SELECT NEW.date, 1 
+                WHERE (SELECT changes() = 0);
             END;
         ''')
 
@@ -96,12 +105,67 @@ def get_views_per_day():
 
     return views_per_day
 
-# create_db_ifnot()
+
+def has_sent_email_within_last_15_minutes():
+    try:
+        # Check if the current time is after 6pm today
+        if datetime.now().hour < 18:
+            return False
+
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+
+        # Calculate the start of today at 6pm
+        start_of_today_at_6pm = datetime.combine(datetime.today(), datetime.min.time()) + timedelta(hours=18)
+
+        # Execute SQL query to check if an email has been sent after 6pm today
+        cursor.execute('''
+            SELECT COUNT(*)
+            FROM sent_emails
+            WHERE sent_at >= ?
+        ''', (start_of_today_at_6pm,))
+
+        # Fetch the result
+        result = cursor.fetchone()[0]
+
+        # Close the connection
+        conn.close()
+
+        return result > 0
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+        return False
+
+def mark_email_as_sent():
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+
+        # Insert the current timestamp into the "sent_emails" table
+        cursor.execute("INSERT INTO sent_emails (sent_at) VALUES (?)", (datetime.now(),))
+
+        # Commit changes and close the connection
+        conn.commit()
+        conn.close()
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
 
 # add_data_with_view("14/03/2024", True)
-# add_data_with_view("14/03/2024", False) # Adding a view for a different date
 
-# views_per_day = get_views_per_day()
-# for date, count in views_per_day.items():
-#     print(f"Date: {date}, Total Views: {count}")
-print(get_views_per_day())
+def send_final_mail():
+    
+    # Check if an email has been sent within the last 15 minutes
+    if has_sent_email_within_last_15_minutes() or True:
+        views_per_day = get_views_per_day()
+        body = ''
+        for date, count in views_per_day.items():
+            print(f"Date: {date}, Total Views: {count}")
+            body += f"Date: {date}, Total Views: {count}\n"
+        sm = SendErrorMail()
+        breakpoint()
+        sm.send_email(system_no=SYSTEM_NO,subject="Unique view on xana.net",body=body)
+        print("Sending email...")
+        mark_email_as_sent()
+
