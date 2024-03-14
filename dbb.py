@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime, timedelta
 from maill import SendErrorMail
-from variable import *
+from etc.variable import *
 
 
 
