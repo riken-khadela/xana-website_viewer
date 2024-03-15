@@ -163,7 +163,6 @@ def send_final_mail():
             print(f"Date: {date}, Total Views: {count}")
             body += f"Date: {date}, Total Views: {count}\n"
         sm = SendErrorMail()
-        breakpoint()
         sm.send_email(system_no=SYSTEM_NO,subject="Unique view on xana.net",body=body)
         print("Sending email...")
         mark_email_as_sent()
