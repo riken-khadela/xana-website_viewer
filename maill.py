@@ -16,6 +16,7 @@ class SendErrorMail:
     def __init__(self): ...
 
     def send_email(self, subject, system_no, body):
+        return
         add_line = ''
         if not system_no:
             try:
