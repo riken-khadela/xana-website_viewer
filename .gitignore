@@ -3,3 +3,4 @@ etc
 *.log
 __pycache__
 *.sh
+*.db

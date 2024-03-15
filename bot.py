@@ -219,7 +219,7 @@ def driver_get_xana(driver):
 
 def run_some_random_activity(driver):
     print('running some random activities')
-    randomnumberrr = 2
+    randomnumberrr = 1
     done_activity_nunber = 0
     while randomnumberrr != done_activity_nunber :
         driver.switch_to.window(driver.window_handles[-1])
@@ -234,13 +234,13 @@ def run_some_random_activity(driver):
                         break
                     except : ...
                 if not "xana.net" in driver.current_url :
-                    driver.get('https://xana.net')
+                    driver_get_xana(driver)
                 
                     
                 random_sleep()
             done_activity_nunber += 1
             if done_activity_nunber %2 == 0 : 
-                driver.get('https://xana.net/app')
+                driver_get_xana(driver)
         except : ...
         random_sleep()
 
@@ -255,21 +255,21 @@ def work():
                 chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                 driver = webdriver.Chrome( options=chrome_options)
                 connect_touchvpn(driver)
-                driver.get('https://xana.net')
+                driver_get_xana(driver)
 
             elif method == 2:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_turbo(driver)
-                driver.get('https://xana.net')
+                driver_get_xana(driver)
                 
             elif method ==3:
                 # chrome_options = webdriver.ChromeOptions()
                 chrome_options.add_extension(r'./cyberghost.crx')
                 driver = webdriver.Chrome(options=chrome_options)
                 connect_cyberghost_vpn(driver)
-                driver.get('https://xana.net')
+                driver_get_xana(driver)
                 
             elif method == 4:
                 """Not working"""
