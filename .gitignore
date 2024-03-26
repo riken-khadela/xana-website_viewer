@@ -4,3 +4,4 @@ etc
 __pycache__
 *.sh
 *.db
+etc

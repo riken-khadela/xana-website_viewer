@@ -14,6 +14,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, send_final_mail
 from datetime import datetime
 
+
+
+with open('proxies.txt', 'r') as file: lines = file.readlines()
+
+
 def find_element(driver,xpath,locator=By.XPATH,timeout=10):
     wait = WebDriverWait(driver, timeout)
     try:
@@ -244,53 +249,38 @@ def run_some_random_activity(driver):
         except : ...
         random_sleep()
 
-def work():
+def work(prx):
         try:
             logging.info('open selenium driver')
-            method = random.randint(1,3)
-            method = 1
+            from seleniumwire import webdriver
+            proxy_options = {
+                'proxy': {
+                    'https': prx.replace('\n',''),
+                }
+            }
             chrome_options = webdriver.ChromeOptions()
-            # chrome_options.add_argument("--remote-debugging-port=9222")
-            if method ==1:
-                chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-                driver = webdriver.Chrome( options=chrome_options)
-                connect_touchvpn(driver)
-                driver_get_xana(driver)
-
-            elif method == 2:
-                # chrome_options = webdriver.ChromeOptions()
-                chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
-                driver = webdriver.Chrome(options=chrome_options)
-                connect_turbo(driver)
-                driver_get_xana(driver)
-                
-            elif method ==3:
-                # chrome_options = webdriver.ChromeOptions()
-                chrome_options.add_extension(r'./cyberghost.crx')
-                driver = webdriver.Chrome(options=chrome_options)
-                connect_cyberghost_vpn(driver)
-                driver_get_xana(driver)
-                
-            elif method == 4:
-                """Not working"""
-                ...
-                # return
-                # driver = webdriver.Chrome(options=chrome_options,)
-                # driver.get('https://www.blockaway.net/')
-                # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
-                # text_box.send_keys('https://xana.net/app')
-                # text_box.send_keys(Keys.RETURN)
-                
-            elif method ==5:
-                # return
-                driver = webdriver.Chrome(options=chrome_options,)
-                driver.get('https://www.croxyproxy.net/')
-                text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
-                text_box.send_keys('https://xana.net/app')
-                text_box.send_keys(Keys.RETURN)
-            
-            # driver.execute_script(f"window.open('{random.choice(urls)}')")
-            # driver.switch_to.window(driver.window_handles[-1])
+            prefs = {"credentials_enable_service": True,
+                'profile.default_content_setting_values.automatic_downloads': 1,
+                "download.default_directory" : f"{check_Downloads_folder()}",
+            'download.prompt_for_download': False, 
+            'download.directory_upgrade': True,
+            'safebrowsing.enabled': True ,
+            "profile.password_manager_enabled": True}
+            chrome_options.add_experimental_option("prefs", prefs)
+            chrome_options.add_argument('--lang=en')  
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--mute-audio') 
+            chrome_options.add_argument("--enable-webgl-draft-extensions")
+            chrome_options.add_argument("--ignore-gpu-blocklist")
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--start-maximized')
+            chrome_options.add_argument("--ignore-certificate-errors")
+            chrome_options.add_argument("--enable-javascript")
+            chrome_options.add_argument("--enable-popup-blocking")
+            chrome_options.add_experimental_option("useAutomationExtension", False)
+            chrome_options.add_argument('--remote-debugging-pipe')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            driver = webdriver.Chrome(seleniumwire_options=proxy_options, options=chrome_options)
             
             windows = driver.window_handles
             for i in windows : 
@@ -301,20 +291,44 @@ def work():
         except Exception as e: print(e) 
         driver.quit()
     
-num_threads = 10
 # while True:
 #     with ThreadPoolExecutor(max_workers=threads) as executor:
 #         futures = [executor.submit(work) for _ in range(threads)]
 
+def check_Downloads_folder():
+    import os, shutil
+    dwn_path = os.path.join(os.getcwd(),'Downloads')
+    if not os.path.exists(dwn_path) :
+        os.mkdir(dwn_path)
+    else :
+        shutil.rmtree(dwn_path)
+        os.mkdir(dwn_path)
+    return dwn_path
+
+def get_random_prx():
+    global lines
+    if not lines : 
+        with open('proxies.txt', 'r') as file: lines = file.readlines()
+        
+    if lines :
+        return random.choice(lines)
+    else :
+        with open('proxies.txt', 'r') as file: lines = file.readlines()
+        return random.choice(lines)
+
+
 import concurrent.futures
 create_db_ifnot()
+
+
+num_threads = 1
 
 def main():
     active_threads = set()
 
     def start_new_thread():
         while True:
-            work()
+            work(get_random_prx())
     
     # Start the initial threads
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
