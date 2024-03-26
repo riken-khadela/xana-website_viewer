@@ -1,7 +1,6 @@
 import argparse
 import tempfile
 from pathlib import Path
-from tkinter import Y
 from utils import run_cmd
 from main import LOGGER
 
