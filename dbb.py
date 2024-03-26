@@ -154,7 +154,7 @@ def mark_email_as_sent():
 # add_data_with_view("14/03/2024", True)
 
 def send_final_mail():
-    
+    return
     # Check if an email has been sent within the last 15 minutes
     if has_sent_email_within_last_15_minutes() or True:
         views_per_day = get_views_per_day()

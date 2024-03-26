@@ -221,6 +221,11 @@ def driver_get_xana(driver):
     driver.get('https://xana.net')
     add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
     send_final_mail()
+    
+    windows = driver.window_handles
+    for i in windows : 
+        driver.switch_to.window(i)
+        if 'xana.net' not in driver.current_url : driver.close()
 
 def run_some_random_activity(driver):
     print('running some random activities')
