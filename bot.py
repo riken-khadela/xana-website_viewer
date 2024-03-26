@@ -13,7 +13,7 @@ import logging
 from webdriver_manager.chrome import ChromeDriverManager
 from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, send_final_mail
 from datetime import datetime
-
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 with open('proxies.txt', 'r') as file: lines = file.readlines()
@@ -217,7 +217,7 @@ def connect_turbo(driver):
             return False
     except :...
 
-def driver_get_xana(driver):
+def driver_get_xana(driver,link):
     driver.get('https://xana.net')
     add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
     send_final_mail()
@@ -227,7 +227,7 @@ def driver_get_xana(driver):
         driver.switch_to.window(i)
         if 'xana.net' not in driver.current_url : driver.close()
 
-def run_some_random_activity(driver):
+def run_some_random_activity(driver,link,engagement=False):
     print('running some random activities')
     randomnumberrr = 1
     done_activity_nunber = 0
@@ -236,21 +236,30 @@ def run_some_random_activity(driver):
         aa = driver.find_elements(By.TAG_NAME,'a')
         try :
             for _ in range(random.randint(1,4)):
-                aa = driver.find_elements(By.TAG_NAME,'a')
-                random.shuffle(aa)
-                for a_ele in aa :
-                    try:
-                        a_ele.click()
-                        break
-                    except : ...
-                if not "xana.net" in driver.current_url :
-                    driver_get_xana(driver)
+                if engagement:
+                    aa = driver.find_elements(By.TAG_NAME,'a')
+                    random.shuffle(aa)
+                    for a_ele in aa :
+                        try:
+                            a_ele.click()
+                            break
+                        except : ...
+                    if not link in driver.current_url :
+                        driver_get_xana(driver,link)
+                random_sleep()
+                actions = ActionChains(driver)
+                element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
+                actions.move_to_element(element_to_scroll_to).perform()
                 
-                    
+                random_sleep(1,4)
+                elements_to_scroll_to = driver.find_elements(By.TAG_NAME,'section')
+                actions.move_to_element(random.choice(elements_to_scroll_to)).perform()
+                
+                
                 random_sleep()
             done_activity_nunber += 1
             if done_activity_nunber %2 == 0 : 
-                driver_get_xana(driver)
+                driver_get_xana(driver,link)
         except : ...
         random_sleep()
 
@@ -286,13 +295,16 @@ def work(prx):
             chrome_options.add_argument('--remote-debugging-pipe')
             chrome_options.add_argument('--disable-dev-shm-usage')
             driver = webdriver.Chrome(seleniumwire_options=proxy_options, options=chrome_options)
-            
+            driver.get("https://xana.net/nftduel/en/")
+            # element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
             windows = driver.window_handles
             for i in windows : 
                 driver.switch_to.window(i)
                 if 'xana.net' not in driver.current_url : driver.close()
             
-            run_some_random_activity(driver)
+            run_some_random_activity(driver,link="xana.net/nftduel/en/")
+            driver.get("https://xana.net/")
+            run_some_random_activity(driver,link="xana.net",engagement=True)
         except Exception as e: print(e) 
         driver.quit()
     
