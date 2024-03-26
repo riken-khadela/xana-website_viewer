@@ -5,3 +5,9 @@ __pycache__
 *.sh
 *.db
 etc
+apk
+Downloads
+images
+temp
+tasks
+logs
