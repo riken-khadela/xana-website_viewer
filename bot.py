@@ -294,7 +294,7 @@ def work(prx):
             chrome_options.add_experimental_option("useAutomationExtension", False)
             chrome_options.add_argument('--remote-debugging-pipe')
             chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--headless')
+            # chrome_options.add_argument('--headless')
             driver = webdriver.Chrome(seleniumwire_options=proxy_options, options=chrome_options)
             driver.get("https://xana.net/nftduel/en/")
             # element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
