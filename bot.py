@@ -14,6 +14,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, send_final_mail
 from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
+import pickle
 
 
 with open('proxies.txt', 'r') as file: lines = file.readlines()
@@ -216,6 +217,46 @@ def connect_turbo(driver):
         else:
             return False
     except :...
+    
+    
+def connect_surf(driver):
+    driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+    time.sleep(3)
+    quick=driver.find_elements(By.XPATH, "//button[contains(text(), 'Quick-connect')]")
+    disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+    check=quick or disconnect_btn
+    if check:
+        driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+        time.sleep(4)
+        continue_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Continue')]")
+        if continue_btn:continue_btn[0].click()
+        time.sleep(4)
+        disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+        if disconnect_btn:disconnect_btn[0].click()
+        time.sleep(4)
+        all=driver.find_elements(By.CLASS_NAME,"SnNof")
+        # breakpoint()
+        if all:all[random.randint(0,len(all))].click()
+        time.sleep(4)
+    else:
+        driver.get('https://my.surfshark.com/home/dashboard')
+        with open('./surf.pkl', 'rb') as cookiesfile:
+            cookies = pickle.load(cookiesfile)
+            for cookie in cookies:
+                driver.add_cookie(cookie)
+        driver.refresh()
+        driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+        time.sleep(4)
+        continue_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Continue')]")
+        if continue_btn:continue_btn[0].click()
+        time.sleep(4)
+        disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+        if disconnect_btn:disconnect_btn[0].click()
+        time.sleep(4)
+        all=driver.find_elements(By.CLASS_NAME,"SnNof")
+        # breakpoint()
+        if all:all[random.randint(0,len(all))].click()
+        time.sleep(4)  
 
 def driver_get_xana(driver,link):
     driver.get('https://xana.net')
@@ -263,39 +304,89 @@ def run_some_random_activity(driver,link,engagement=False):
         except : ...
         random_sleep()
 
+def connect_surf(driver):
+    driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+    time.sleep(3)
+    quick=driver.find_elements(By.XPATH, "//button[contains(text(), 'Quick-connect')]")
+    disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+    check=quick or disconnect_btn
+    if check:
+        driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+        time.sleep(4)
+        continue_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Continue')]")
+        if continue_btn:continue_btn[0].click()
+        time.sleep(4)
+        disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+        if disconnect_btn:disconnect_btn[0].click()
+        time.sleep(4)
+        all=driver.find_elements(By.CLASS_NAME,"SnNof")
+        # breakpoint()
+        if all:all[random.randint(0,len(all))].click()
+        time.sleep(4)
+    else:
+        driver.get('https://my.surfshark.com/home/dashboard')
+        with open('./surf.pkl', 'rb') as cookiesfile:
+            cookies = pickle.load(cookiesfile)
+            for cookie in cookies:
+                driver.add_cookie(cookie)
+        driver.refresh()
+        driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
+        time.sleep(4)
+        continue_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Continue')]")
+        if continue_btn:continue_btn[0].click()
+        time.sleep(4)
+        disconnect_btn=driver.find_elements(By.XPATH, "//button[contains(text(), 'Disconnect')]")
+        if disconnect_btn:disconnect_btn[0].click()
+        time.sleep(4)
+        all=driver.find_elements(By.CLASS_NAME,"SnNof")
+        # breakpoint()
+        if all:all[random.randint(0,len(all))].click()
+        time.sleep(4)  
+
 def work(prx):
         try:
             logging.info('open selenium driver')
-            from seleniumwire import webdriver
-            proxy_options = {
-                'proxy': {
-                    'https': prx.replace('\n',''),
-                }
-            }
+            method = random.randint(1,3)
             chrome_options = webdriver.ChromeOptions()
-            prefs = {"credentials_enable_service": True,
-                'profile.default_content_setting_values.automatic_downloads': 1,
-                "download.default_directory" : f"{check_Downloads_folder()}",
-            'download.prompt_for_download': False, 
-            'download.directory_upgrade': True,
-            'safebrowsing.enabled': True ,
-            "profile.password_manager_enabled": True}
-            chrome_options.add_experimental_option("prefs", prefs)
-            chrome_options.add_argument('--lang=en')  
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--mute-audio') 
-            chrome_options.add_argument("--enable-webgl-draft-extensions")
-            chrome_options.add_argument("--ignore-gpu-blocklist")
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--start-maximized')
-            chrome_options.add_argument("--ignore-certificate-errors")
-            chrome_options.add_argument("--enable-javascript")
-            chrome_options.add_argument("--enable-popup-blocking")
-            chrome_options.add_experimental_option("useAutomationExtension", False)
-            chrome_options.add_argument('--remote-debugging-pipe')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            # chrome_options.add_argument('--headless')
-            driver = webdriver.Chrome(seleniumwire_options=proxy_options, options=chrome_options)
+            # chrome_options.add_argument("--remote-debugging-port=9222")
+            if method ==1:
+                # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
+                chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
+                driver = webdriver.Chrome( options=chrome_options)
+                connect_touchvpn(driver)
+                # connect_surf(driver)
+
+            elif method == 2:
+                # chrome_options = webdriver.ChromeOptions()
+                chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
+                driver = webdriver.Chrome(options=chrome_options)
+                connect_turbo(driver)
+                
+            elif method ==3:
+                # chrome_options = webdriver.ChromeOptions()
+                chrome_options.add_extension(r'./cyberghost.crx')
+                driver = webdriver.Chrome(options=chrome_options)
+                connect_cyberghost_vpn(driver)
+                
+            elif method == 4:
+                """Not working"""
+                ...
+                # return
+                # driver = webdriver.Chrome(options=chrome_options,)
+                # driver.get('https://www.blockaway.net/')
+                # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
+                # text_box.send_keys('https://xana.net/app')
+                # text_box.send_keys(Keys.RETURN)
+                
+            elif method ==5:
+                # return
+                driver = webdriver.Chrome(options=chrome_options,)
+                driver.get('https://www.croxyproxy.net/')
+                text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
+                text_box.send_keys('https://xana.net/app')
+                text_box.send_keys(Keys.RETURN)
+            # driver.execute_script(f"window.open('{random.choice(urls)}')")
+            # driver.switch_to.window(driver.window_handles[-1])
             driver.get("https://xana.net/nftduel/en/")
             # element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
             windows = driver.window_handles
@@ -306,6 +397,13 @@ def work(prx):
             run_some_random_activity(driver,link="xana.net/nftduel/en/")
             driver.get("https://xana.net/")
             run_some_random_activity(driver,link="xana.net",engagement=True)
+            
+            # windows = driver.window_handles
+            # for i in windows : 
+            #     driver.switch_to.window(i)
+            #     if 'xana.net' not in driver.current_url : driver.close()
+            
+            # run_some_random_activity(driver)
         except Exception as e: print(e) 
         driver.quit()
     
