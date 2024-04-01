@@ -437,7 +437,7 @@ import concurrent.futures
 create_db_ifnot()
 
 
-num_threads = 1
+num_threads = 10
 
 def main():
     active_threads = set()
