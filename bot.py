@@ -113,50 +113,30 @@ def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
     2. Netherlands
     3. United States
     """
-    try :
-        vpn_country_list = ['Romania','Netherlands','United States']
-        vpn_country = random.choice(vpn_country_list)
-        for  _ in range(3):
-            driver.get('chrome-extension://ffbkglfijbcbgblgflchnbphjdllaogb/index.html')
-            random_sleep()
+    vpn_country_list = ['Romania','Netherlands','United States']
+    vpn_country = random.choice(vpn_country_list)
+    for  _ in range(3):
+        driver.get('chrome-extension://ffbkglfijbcbgblgflchnbphjdllaogb/index.html')
+        random_sleep()
 
-            # Disconnect if already connected
-            connected_btn = find_element('connected vpn circle','/html/body/app-root/main/app-home/div/div[2]/app-switch/div')
-            if connected_btn :
-                if not "disconnected" in connected_btn.get_attribute('class') : 
-                    click_element('connected vpn circle','/html/body/app-root/main/app-home/div/div[2]/app-switch/div')
-                    random_sleep()
-                else: 
-                    random_sleep(5,10)
+        # Disconnect if already connected
+        connected_btn = find_element('connected vpn circle','/html/body/app-root/main/app-home/div/div[2]/app-switch/div')
+        if connected_btn :
+            if not "disconnected" in connected_btn.get_attribute('class') : 
+                click_element('connected vpn circle','/html/body/app-root/main/app-home/div/div[2]/app-switch/div')
+                random_sleep()
+            else: 
+                random_sleep(5,10)
 
-            driver.execute_script('document.querySelector("body > app-root > main > app-home > div > div.servers.en > mat-form-field > div > div.mat-form-field-flex.ng-tns-c19-0 > div").click()')
-            random_sleep(1,3)
-            driver.execute_script(f'document.querySelector("#mat-option-{random.randint(0,3)}").click()')
-            random_sleep(1,3)
-            driver.execute_script(f'document.querySelector("body > app-root > main > app-home > div > div.spinner > app-switch > div").click()')
-            random_sleep(4,10)
-            
+        driver.execute_script('document.querySelector("body > app-root > main > app-home > div > div.servers.en > mat-form-field > div > div.mat-form-field-flex.ng-tns-c19-0 > div").click()')
+        random_sleep(1,3)
+        driver.execute_script(f'document.querySelector("#mat-option-{random.randint(0,3)}").click()')
+        random_sleep(1,3)
+        driver.execute_script(f'document.querySelector("body > app-root > main > app-home > div > div.spinner > app-switch > div").click()')
+        random_sleep(4,10)
+      
+        return
 
-            # # selecting the country
-            # total_option_country = driver.find_elements(By.TAG_NAME, 'mat-option')
-            # for i in total_option_country:
-            #     i_id = i.get_attribute('id')
-            #     country_text_ele = i.find_element(By.XPATH, f"//*[@id='{i_id}']/span")
-            #     country_text = country_text_ele.text
-
-            #     # checking if the country is whether same or not and click on it
-            #     if vpn_country in country_text:
-            #         print('connected country is :',vpn_country)
-            #         country_text_ele.click()
-                    # break
-            # time.sleep(1)
-            # Checking is the VPN connected or not
-            # connected_btn = getvalue_byscript('document.querySelector("body > app-root > main > app-home > div > div.spinner > app-switch > div").getAttribute("class")')
-            # # document.querySelector("body > app-root > main > app-home > div > div.spinner > app-switch > div")
-            # if connected_btn :
-            #     if not "disconnected" in connected_btn.get_attribute('class') : 
-            return
-    except : ...
 def connect_touchvpn(driver):
     """ Will select any counrty from the following 
         1. US
@@ -166,71 +146,67 @@ def connect_touchvpn(driver):
         5. Netherland
         6. UK
     """
+    driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
+    time.sleep(2)
+    time.sleep(3)
+    country = ['Singapore','Germany','United Kingdom','United States']
+    country = random.choice(country)
+    time.sleep(1)
+    window_handles = driver.window_handles
+    time.sleep(1)
+    driver.switch_to.window(window_handles[0])
+    time.sleep(1)
+    driver.find_element(By.XPATH,'//*[@class="location"]').click()
+    time.sleep(3)
+    locations = driver.find_element(By.XPATH,'//*[@class="list"]')
+    time.sleep(1)
+    location = locations.find_elements(By.XPATH,'//*[@class="row"]')
+    location[random.randint(1,7)].click()
+    time.sleep(2)
+    driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
+    wait = WebDriverWait(driver, 10)
     try:
-        driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
-        time.sleep(2)
-        time.sleep(3)
-        country = ['Singapore','Germany','United Kingdom','United States']
-        country = random.choice(country)
-        time.sleep(1)
-        window_handles = driver.window_handles
-        time.sleep(1)
-        driver.switch_to.window(window_handles[0])
-        time.sleep(1)
-        driver.find_element(By.XPATH,'//*[@class="location"]').click()
-        time.sleep(3)
-        locations = driver.find_element(By.XPATH,'//*[@class="list"]')
-        time.sleep(1)
-        location = locations.find_elements(By.XPATH,'//*[@class="row"]')
-        location[random.randint(1,7)].click()
-        time.sleep(2)
-        driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
-        wait = WebDriverWait(driver, 10)
-        try:
-            wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="Stop"]')))
-        except Exception as e:
-            print(f"Error: {e}")
-        connected = driver.find_element(By.XPATH,'//*[text()="Stop"]')
-        if connected:
-            return True
-        else:
-            return False
-    except : ...
+        wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="Stop"]')))
+    except Exception as e:
+        print(f"Error: {e}")
+    connected = driver.find_element(By.XPATH,'//*[text()="Stop"]')
+    if connected:
+        return True
+    else:
+        return False
         
 def connect_turbo(driver):    
-    try :
-        country = ['Singapore','Germany','United Kingdom','United States']
-        country = country[random.randint(0,3)]
+    country = ['Singapore','Germany','United Kingdom','United States']
+    country = country[random.randint(0,3)]
+    time.sleep(1)
+    window_handles = driver.window_handles
+    time.sleep(1)
+    driver.switch_to.window(window_handles[0])
+    time.sleep(1)
+    driver.get('chrome-extension://bnlofglpdlboacepdieejiecfbfpmhlb/popup/popup.html')
+    time.sleep(2)
+    location = driver.find_element(By.XPATH,'/html/body/div/div/div[4]/div[1]/div[3]')
+    if location:
+        location.click()
+        time.sleep(5)
+        searver_list = driver.find_element(By.XPATH,'/html/body/div/div/div[3]/div[1]/div[3]/div[2]/div')
         time.sleep(1)
-        window_handles = driver.window_handles
-        time.sleep(1)
-        driver.switch_to.window(window_handles[0])
-        time.sleep(1)
-        driver.get('chrome-extension://bnlofglpdlboacepdieejiecfbfpmhlb/popup/popup.html')
-        time.sleep(2)
-        location = driver.find_element(By.XPATH,'/html/body/div/div/div[4]/div[1]/div[3]')
-        if location:
-            location.click()
-            time.sleep(5)
-            searver_list = driver.find_element(By.XPATH,'/html/body/div/div/div[3]/div[1]/div[3]/div[2]/div')
-            time.sleep(1)
-            countrys = searver_list.find_elements(By.XPATH,'.//div')
-            countrys[random.randint(0,3)].click()
-                    
-        wait = WebDriverWait(driver, 10)
-        try:
-            wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
-        except Exception as e:
-            driver.find_element(By.XPATH,'//*[@class="start-btn"]').click()
-            wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
-            print(f"Error: {e}")
-        connected = driver.find_element(By.XPATH,'//*[text()="CONNECTED"]')
-        if connected:
-            return True
-        else:
-            return False
-    except :...
-    
+        countrys = searver_list.find_elements(By.XPATH,'.//div')
+        countrys[random.randint(0,3)].click()
+                
+    wait = WebDriverWait(driver, 10)
+    try:
+        wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
+    except Exception as e:
+        driver.find_element(By.XPATH,'//*[@class="start-btn"]').click()
+        wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
+        print(f"Error: {e}")
+    connected = driver.find_element(By.XPATH,'//*[text()="CONNECTED"]')
+    if connected:
+        return True
+    else:
+        return False
+
     
 def connect_surf(driver):
     driver.get('chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/index.html')
