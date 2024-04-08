@@ -108,6 +108,11 @@ def getvalue_byscript(driver,script = '',reason=''):
         value = driver.execute_script(f'return {script}')  
         return value
 def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
+    """ Will connect to following counrty :
+    1. Romania
+    2. Netherlands
+    3. United States
+    """
     try :
         vpn_country_list = ['Romania','Netherlands','United States']
         vpn_country = random.choice(vpn_country_list)
@@ -153,6 +158,14 @@ def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
             return
     except : ...
 def connect_touchvpn(driver):
+    """ Will select any counrty from the following 
+        1. US
+        2. Canada
+        3. Russian Federation
+        4. Germany
+        5. Netherland
+        6. UK
+    """
     try:
         driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
         time.sleep(2)
@@ -169,7 +182,7 @@ def connect_touchvpn(driver):
         locations = driver.find_element(By.XPATH,'//*[@class="list"]')
         time.sleep(1)
         location = locations.find_elements(By.XPATH,'//*[@class="row"]')
-        location[random.randint(0,7)].click()
+        location[random.randint(1,7)].click()
         time.sleep(2)
         driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
         wait = WebDriverWait(driver, 10)
@@ -348,6 +361,7 @@ def work(prx):
             logging.info('open selenium driver')
             method = random.randint(1,3)
             chrome_options = webdriver.ChromeOptions()
+            
             # chrome_options.add_argument("--remote-debugging-port=9222")
             if method ==1:
                 # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
