@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime, timedelta
-from etc.maill import SendErrorMail
+# from etc.maill import SendErrorMail
 from etc.variable import *
 
 
@@ -156,14 +156,14 @@ def mark_email_as_sent():
 def send_final_mail():
     return
     # Check if an email has been sent within the last 15 minutes
-    if has_sent_email_within_last_15_minutes() or True:
-        views_per_day = get_views_per_day()
-        body = ''
-        for date, count in views_per_day.items():
-            print(f"Date: {date}, Total Views: {count}")
-            body += f"Date: {date}, Total Views: {count}\n"
-        sm = SendErrorMail()
-        sm.send_email(system_no=SYSTEM_NO,subject="Unique view on xana.net",body=body)
-        print("Sending email...")
-        mark_email_as_sent()
+    # if has_sent_email_within_last_15_minutes() or True:
+    #     views_per_day = get_views_per_day()
+    #     body = ''
+    #     for date, count in views_per_day.items():
+    #         print(f"Date: {date}, Total Views: {count}")
+    #         body += f"Date: {date}, Total Views: {count}\n"
+    #     sm = SendErrorMail()
+    #     sm.send_email(system_no=SYSTEM_NO,subject="Unique view on xana.net",body=body)
+    #     print("Sending email...")
+    #     mark_email_as_sent()
 
