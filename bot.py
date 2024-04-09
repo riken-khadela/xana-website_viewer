@@ -329,7 +329,7 @@ def work(prx):
         try:
             logging.info('open selenium driver')
             method = random.randint(1,3)
-            method = 2
+            method = 10
             chrome_options = webdriver.ChromeOptions()
             
             # chrome_options.add_argument("--remote-debugging-port=9222")
