@@ -369,6 +369,9 @@ def work(prx):
                 text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
                 text_box.send_keys('https://xana.net/app')
                 text_box.send_keys(Keys.RETURN)
+            else :
+                driver = webdriver.Chrome(options=chrome_options)
+                
             # driver.execute_script(f"window.open('{random.choice(urls)}')")
             # driver.switch_to.window(driver.window_handles[-1])
             driver.get("https://xana.net/nftduel/en/")
