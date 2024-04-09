@@ -15,6 +15,7 @@ from dbb import create_db_ifnot,add_data_with_view, get_views_per_day
 from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
 import pickle
+import argparse
 
 
 with open('proxies.txt', 'r') as file: lines = file.readlines()
@@ -325,50 +326,51 @@ def connect_surf(driver):
         if all:all[random.randint(0,len(all))].click()
         time.sleep(4)  
 
-def work(prx):
+def work(prx,vpn = False):
         try:
             logging.info('open selenium driver')
-            method = random.randint(1,3)
-            method = 10
             chrome_options = webdriver.ChromeOptions()
             
             # chrome_options.add_argument("--remote-debugging-port=9222")
-            if method ==1:
-                # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
-                chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-                driver = webdriver.Chrome( options=chrome_options)
-                connect_touchvpn(driver)
-                # connect_surf(driver)
+            if vpn :
+                method = random.randint(1,3)
+                if method ==1:
+                    # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
+                    chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
+                    driver = webdriver.Chrome( options=chrome_options)
+                    connect_touchvpn(driver)
+                    # connect_surf(driver)
 
-            elif method == 2:
-                # chrome_options = webdriver.ChromeOptions()
-                chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
-                driver = webdriver.Chrome(options=chrome_options)
-                connect_turbo(driver)
-                
-            elif method ==3:
-                # chrome_options = webdriver.ChromeOptions()
-                chrome_options.add_extension(r'./cyberghost.crx')
-                driver = webdriver.Chrome(options=chrome_options)
-                connect_cyberghost_vpn(driver)
-                
-            elif method == 4:
-                """Not working"""
-                ...
-                # return
-                # driver = webdriver.Chrome(options=chrome_options,)
-                # driver.get('https://www.blockaway.net/')
-                # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
-                # text_box.send_keys('https://xana.net/app')
-                # text_box.send_keys(Keys.RETURN)
-                
-            elif method ==5:
-                # return
-                driver = webdriver.Chrome(options=chrome_options,)
-                driver.get('https://www.croxyproxy.net/')
-                text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
-                text_box.send_keys('https://xana.net/app')
-                text_box.send_keys(Keys.RETURN)
+                elif method == 2:
+                    # chrome_options = webdriver.ChromeOptions()
+                    chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
+                    driver = webdriver.Chrome(options=chrome_options)
+                    connect_turbo(driver)
+                    
+                elif method ==3:
+                    # chrome_options = webdriver.ChromeOptions()
+                    chrome_options.add_extension(r'./cyberghost.crx')
+                    driver = webdriver.Chrome(options=chrome_options)
+                    connect_cyberghost_vpn(driver)
+                    
+                elif method == 4:
+                    """Not working"""
+                    ...
+                    # return
+                    # driver = webdriver.Chrome(options=chrome_options,)
+                    # driver.get('https://www.blockaway.net/')
+                    # text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
+                    # text_box.send_keys('https://xana.net/app')
+                    # text_box.send_keys(Keys.RETURN)
+                    
+                elif method ==5:
+                    # return
+                    driver = webdriver.Chrome(options=chrome_options,)
+                    driver.get('https://www.croxyproxy.net/')
+                    text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'url')))
+                    text_box.send_keys('https://xana.net/app')
+                    text_box.send_keys(Keys.RETURN)
+                    
             else :
                 driver = webdriver.Chrome(options=chrome_options)
                 
@@ -424,14 +426,14 @@ import concurrent.futures
 create_db_ifnot()
 
 
-num_threads = 1
+num_threads = 10
 
-def main():
+def main(vpn=False):
     active_threads = set()
 
     def start_new_thread():
         while True:
-            work(get_random_prx())
+            work(get_random_prx(),vpn=vpn)
     
     # Start the initial threads
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
@@ -448,6 +450,10 @@ def main():
                 active_threads.add(new_thread)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--vpn", help="Connect to VPN", action="store_true", default=False)
+    args = parser.parse_args()
+
     from dbb import create_db_ifnot
     create_db_ifnot()
-    main()
+    main(vpn=args.vpn)
