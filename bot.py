@@ -11,7 +11,7 @@ from selenium import webdriver
 from concurrent.futures import ThreadPoolExecutor, wait
 import logging
 from webdriver_manager.chrome import ChromeDriverManager
-from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, send_final_mail
+from dbb import create_db_ifnot,add_data_with_view, get_views_per_day
 from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
 import pickle
@@ -149,8 +149,6 @@ def connect_touchvpn(driver):
     driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
     time.sleep(2)
     time.sleep(3)
-    country = ['Singapore','Germany','United Kingdom','United States']
-    country = random.choice(country)
     time.sleep(1)
     window_handles = driver.window_handles
     time.sleep(1)
@@ -224,7 +222,6 @@ def connect_surf(driver):
         if disconnect_btn:disconnect_btn[0].click()
         time.sleep(4)
         all=driver.find_elements(By.CLASS_NAME,"SnNof")
-        # breakpoint()
         if all:all[random.randint(0,len(all))].click()
         time.sleep(4)
     else:
@@ -243,14 +240,12 @@ def connect_surf(driver):
         if disconnect_btn:disconnect_btn[0].click()
         time.sleep(4)
         all=driver.find_elements(By.CLASS_NAME,"SnNof")
-        # breakpoint()
         if all:all[random.randint(0,len(all))].click()
         time.sleep(4)  
 
 def driver_get_xana(driver,link):
     driver.get('https://xana.net')
     add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
-    send_final_mail()
     
     windows = driver.window_handles
     for i in windows : 
@@ -309,7 +304,6 @@ def connect_surf(driver):
         if disconnect_btn:disconnect_btn[0].click()
         time.sleep(4)
         all=driver.find_elements(By.CLASS_NAME,"SnNof")
-        # breakpoint()
         if all:all[random.randint(0,len(all))].click()
         time.sleep(4)
     else:
@@ -328,7 +322,6 @@ def connect_surf(driver):
         if disconnect_btn:disconnect_btn[0].click()
         time.sleep(4)
         all=driver.find_elements(By.CLASS_NAME,"SnNof")
-        # breakpoint()
         if all:all[random.randint(0,len(all))].click()
         time.sleep(4)  
 
@@ -336,6 +329,7 @@ def work(prx):
         try:
             logging.info('open selenium driver')
             method = random.randint(1,3)
+            method = 2
             chrome_options = webdriver.ChromeOptions()
             
             # chrome_options.add_argument("--remote-debugging-port=9222")
@@ -427,7 +421,7 @@ import concurrent.futures
 create_db_ifnot()
 
 
-num_threads = 10
+num_threads = 1
 
 def main():
     active_threads = set()

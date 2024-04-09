@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime, timedelta
-from maill import SendErrorMail
+from etc.maill import SendErrorMail
 from etc.variable import *
 
 
