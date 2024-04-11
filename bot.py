@@ -111,11 +111,10 @@ def getvalue_byscript(driver,script = '',reason=''):
 def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
     """ Will connect to following counrty :
     1. Romania
-    2. Netherlands
+    2. Gernmany 
     3. United States
     """
-    vpn_country_list = ['Romania','Netherlands','United States']
-    vpn_country = random.choice(vpn_country_list)
+    
     for  _ in range(3):
         driver.get('chrome-extension://ffbkglfijbcbgblgflchnbphjdllaogb/index.html')
         random_sleep()
@@ -131,7 +130,7 @@ def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
 
         driver.execute_script('document.querySelector("body > app-root > main > app-home > div > div.servers.en > mat-form-field > div > div.mat-form-field-flex.ng-tns-c19-0 > div").click()')
         random_sleep(1,3)
-        driver.execute_script(f'document.querySelector("#mat-option-{random.randint(0,3)}").click()')
+        driver.execute_script(f'document.querySelector("#mat-option-{random.choice([0,2,3])}").click()')
         random_sleep(1,3)
         driver.execute_script(f'document.querySelector("body > app-root > main > app-home > div > div.spinner > app-switch > div").click()')
         random_sleep(4,10)
@@ -144,7 +143,7 @@ def connect_touchvpn(driver):
         2. Canada
         3. Russian Federation
         4. Germany
-        5. Netherland
+        5. Netherland (Removed and will not connect now)
         6. UK
     """
     driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
@@ -160,6 +159,7 @@ def connect_touchvpn(driver):
     locations = driver.find_element(By.XPATH,'//*[@class="list"]')
     time.sleep(1)
     location = locations.find_elements(By.XPATH,'//*[@class="row"]')
+    location = [ i for i in location if not "Netherlands" == i.text]
     location[random.randint(1,7)].click()
     time.sleep(2)
     driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
