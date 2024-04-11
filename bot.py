@@ -192,7 +192,7 @@ def connect_turbo(driver):
         time.sleep(1)
         countrys = searver_list.find_elements(By.XPATH,'.//div')
         countrys[random.randint(0,3)].click()
-                
+    
     wait = WebDriverWait(driver, 10)
     try:
         wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
@@ -334,6 +334,7 @@ def work(prx,vpn = False):
             # chrome_options.add_argument("--remote-debugging-port=9222")
             if vpn :
                 method = random.randint(1,3)
+                method = 2
                 if method ==1:
                     # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
                     chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
