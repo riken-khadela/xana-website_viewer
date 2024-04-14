@@ -11,7 +11,7 @@ from selenium import webdriver
 from concurrent.futures import ThreadPoolExecutor, wait
 import logging
 from webdriver_manager.chrome import ChromeDriverManager
-from dbb import create_db_ifnot,add_data_with_view, get_views_per_day
+from dbb import create_db_ifnot,add_data_with_view, get_views_per_day, get_today_views
 from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
 import pickle
@@ -247,7 +247,10 @@ def connect_surf(driver):
 def driver_get_xana(driver,link):
     driver.get('https://xana.net')
     add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
-    
+    views_per_day = get_views_per_day()
+    for date, count in views_per_day.items(): 
+        print(f"Date: {date}, Total Views: {count}")
+        
     windows = driver.window_handles
     for i in windows : 
         driver.switch_to.window(i)

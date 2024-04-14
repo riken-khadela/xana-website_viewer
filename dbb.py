@@ -67,7 +67,7 @@ def add_data_with_view(date, view):
         cursor = conn.cursor()
 
         # Insert data into main_table
-        # cursor.execute("INSERT INTO main_table (date, view) VALUES (?, ?)", (date, view))
+        cursor.execute("INSERT INTO main_table (date, view) VALUES (?, ?)", (date, view))
 
         # If view is True, insert data into attached_table as well
         if view:
@@ -104,6 +104,33 @@ def get_views_per_day():
 
     return views_per_day
 
+def get_today_views():
+    today_views = {}
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+
+        # Get today's date
+        today_date = datetime.now().date()
+
+        # Execute SQL query to get the total count of views for today
+        cursor.execute('''
+            SELECT COUNT(*) AS total_views
+            FROM attached_table
+            WHERE date = ?
+        ''', (today_date,))
+        
+        # Fetch the total views for today
+        row = cursor.fetchone()
+        if row:
+            today_views[today_date] = row[0]
+
+        conn.close()
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+
+    return today_views
 
 def has_sent_email_within_last_15_minutes():
     try:
