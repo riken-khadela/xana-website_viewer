@@ -246,6 +246,8 @@ def connect_surf(driver):
 
 def driver_get_xana(driver,link):
     driver.get('https://xana.net')
+    add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
+    
     views_per_day = get_views_per_day()
     for date, count in views_per_day.items(): 
         print(f"Date: {date}, Total Views: {count}")
@@ -262,33 +264,31 @@ def run_some_random_activity(driver,link,engagement=False):
     while randomnumberrr != done_activity_nunber :
         driver.switch_to.window(driver.window_handles[-1])
         aa = driver.find_elements(By.TAG_NAME,'a')
-        try :
-            for _ in range(random.randint(1,4)):
-                if engagement:
-                    aa = driver.find_elements(By.TAG_NAME,'a')
-                    random.shuffle(aa)
-                    for a_ele in aa :
-                        try:
-                            a_ele.click()
-                            break
-                        except : ...
-                    if not link in driver.current_url :
-                        driver_get_xana(driver,link)
-                random_sleep()
-                actions = ActionChains(driver)
-                element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
-                actions.move_to_element(element_to_scroll_to).perform()
-                
-                random_sleep(1,4)
-                elements_to_scroll_to = driver.find_elements(By.TAG_NAME,'section')
-                actions.move_to_element(random.choice(elements_to_scroll_to)).perform()
-                
-                
-                random_sleep()
-            done_activity_nunber += 1
-            if done_activity_nunber %2 == 0 : 
-                driver_get_xana(driver,link)
-        except : ...
+        for _ in range(random.randint(1,4)):
+            if engagement:
+                aa = driver.find_elements(By.TAG_NAME,'a')
+                random.shuffle(aa)
+                for a_ele in aa :
+                    try:
+                        a_ele.click()
+                        break
+                    except : ...
+                if not link in driver.current_url :
+                    driver_get_xana(driver,link)
+            random_sleep()
+            actions = ActionChains(driver)
+            element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
+            actions.move_to_element(element_to_scroll_to).perform()
+            
+            random_sleep(1,4)
+            elements_to_scroll_to = driver.find_elements(By.TAG_NAME,'section')
+            actions.move_to_element(random.choice(elements_to_scroll_to)).perform()
+            
+            
+            random_sleep()
+        done_activity_nunber += 1
+        if done_activity_nunber %2 == 0 : 
+            driver_get_xana(driver,link)
         random_sleep()
 
 def connect_surf(driver):
