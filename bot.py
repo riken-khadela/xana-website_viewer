@@ -382,6 +382,9 @@ def work(prx,vpn = False):
             driver.get("https://xana.net/nftduel/en/")
             if driver.current_url :
                 add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
+                views_per_day = get_views_per_day()
+                for date, count in views_per_day.items():
+                    print(f"Date: {date}, Total Views: {count}")
                 
             # element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
             windows = driver.window_handles
@@ -454,6 +457,7 @@ def main(vpn=False):
                 active_threads.remove(thread)
                 new_thread = executor.submit(start_new_thread)
                 active_threads.add(new_thread)
+            
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
