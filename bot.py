@@ -246,7 +246,6 @@ def connect_surf(driver):
 
 def driver_get_xana(driver,link):
     driver.get('https://xana.net')
-    add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
     views_per_day = get_views_per_day()
     for date, count in views_per_day.items(): 
         print(f"Date: {date}, Total Views: {count}")
@@ -381,6 +380,9 @@ def work(prx,vpn = False):
             # driver.execute_script(f"window.open('{random.choice(urls)}')")
             # driver.switch_to.window(driver.window_handles[-1])
             driver.get("https://xana.net/nftduel/en/")
+            if driver.current_url :
+                add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
+                
             # element_to_scroll_to = driver.find_element(By.TAG_NAME,'footer')
             windows = driver.window_handles
             for i in windows : 
