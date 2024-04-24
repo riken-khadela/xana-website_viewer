@@ -114,7 +114,6 @@ def connect_cyberghost_vpn(driver,vpn_country='Netherlands'):
     2. Gernmany 
     3. United States
     """
-    
     for  _ in range(3):
         driver.get('chrome-extension://ffbkglfijbcbgblgflchnbphjdllaogb/index.html')
         random_sleep()
@@ -199,7 +198,6 @@ def connect_turbo(driver):
     except Exception as e:
         driver.find_element(By.XPATH,'//*[@class="start-btn"]').click()
         wait.until(ec.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
-        print(f"Error: {e}")
     connected = driver.find_element(By.XPATH,'//*[text()="CONNECTED"]')
     if connected:
         return True
@@ -335,20 +333,24 @@ def work(prx,vpn = False):
             
             # chrome_options.add_argument("--remote-debugging-port=9222")
             if vpn :
-                method = random.randint(1,3)
-                method = 2
+                method = random.randint(1,2)
+                # method = 3
                 if method ==1:
                     # chrome_options.add_extension(r'./Surfshark-VPN-Extension.crx')
                     chrome_options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
                     driver = webdriver.Chrome( options=chrome_options)
-                    connect_touchvpn(driver)
+                    if not connect_touchvpn(driver) :
+                        driver.quit()
+                        return
                     # connect_surf(driver)
 
                 elif method == 2:
                     # chrome_options = webdriver.ChromeOptions()
                     chrome_options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
                     driver = webdriver.Chrome(options=chrome_options)
-                    connect_turbo(driver)
+                    if not connect_turbo(driver) :
+                        driver.quit()
+                        return
                     
                 elif method ==3:
                     # chrome_options = webdriver.ChromeOptions()
@@ -402,7 +404,8 @@ def work(prx,vpn = False):
             #     if 'xana.net' not in driver.current_url : driver.close()
             
             # run_some_random_activity(driver)
-        except Exception as e: print(e) 
+        except Exception as e: ...
+        
         driver.quit()
     
 # while True:
