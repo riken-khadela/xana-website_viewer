@@ -1,5 +1,5 @@
 env
-etc
+etc/*
 *.log
 __pycache__
 *.sh
