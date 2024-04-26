@@ -7,6 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
+from dbb import add_data_with_view
+
 # Function to check if GA tracking code is present
 def check_ga_loaded(driver):
     try:
@@ -21,6 +23,7 @@ def check_ga_loaded(driver):
 # Function to perform random scrolling and clicking
 def random_browsing():
     while True:
+        add_data_with_view()
         try:
             options = uc.ChromeOptions()
             options.add_argument("--no-sandbox")

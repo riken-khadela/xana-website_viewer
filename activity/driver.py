@@ -17,35 +17,7 @@ class driver_class():
         self.time_running_on_sites = 0
     
     def driver_arguments(self):
-<<<<<<< HEAD
-        self.profile_dir = os.path.join(os.getcwd(),'profiles',str(random.randint(100000,10000000)))
-        
-        self.base_path = os.getcwd()
-        self.download_path = os.path.join(os.getcwd(),'downloads')
-        self.options.add_argument('--lang=en')  
-        self.options.add_argument("--enable-webgl-draft-extensions")
-        self.options.add_argument('--mute-audio')
-        self.options.add_argument("--ignore-gpu-blocklist")
-        self.options.add_argument('--disable-dev-shm-usage')
-        # self.options.add_argument('--headless')
 
-        prefs = {"credentials_enable_service": True,
-                'profile.default_content_setting_values.automatic_downloads': 1,
-                "download.default_directory": "/dev/null",
-            'download.prompt_for_download': False, 
-            'download.directory_upgrade': True,
-            'safebrowsing.enabled': True ,
-            "profile.password_manager_enabled": True}
-        self.options.add_experimental_option("prefs", prefs)
-        self.options.add_argument('--no-sandbox')
-        self.options.add_argument('--start-maximized')    
-        self.options.add_argument('--disable-dev-shm-usage')
-        self.options.add_argument("--ignore-certificate-errors")
-        self.options.add_argument("--enable-javascript")
-        self.options.add_argument("--enable-popup-blocking")
-        self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
-        self.options.add_argument(f"user-data-dir={self.profile_dir}")
-=======
         self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage")
         # self.options.add_argument("--headless")  # Optional: run in headless mode
@@ -74,7 +46,6 @@ class driver_class():
         # self.options.add_argument("--enable-javascript")
         # self.options.add_argument("--enable-popup-blocking")
         # self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
->>>>>>> 95e0795137541b9c45f11eb79b0b68c0c03abd8a
         # self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
         # self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
 

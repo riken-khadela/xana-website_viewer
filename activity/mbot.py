@@ -35,11 +35,7 @@ activities_func_li = [
 import argparse
 from concurrent import futures
 
-<<<<<<< HEAD
-num_threads = 1
-=======
 num_threads = 5
->>>>>>> 95e0795137541b9c45f11eb79b0b68c0c03abd8a
 
 def main(vpn=False):
     active_threads = set()
@@ -48,18 +44,10 @@ def main(vpn=False):
         while True:
             random.shuffle(activities_func_li)
             bt = Xana_bot(vpn=vpn)
-<<<<<<< HEAD
-            for func in activities_func_li :
-                func(bt.driver)
-            os.remove(bt.profile_dir)
-            breakpoint()
-
-=======
             if bt.driver :
                 for func in activities_func_li :
                     func(bt.driver)
     
->>>>>>> 95e0795137541b9c45f11eb79b0b68c0c03abd8a
     # Start the initial threads
     with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         for i in range(num_threads):
