@@ -40,11 +40,11 @@ class xana_net(driver_class):
                 self.driver.refresh()
                 self.random_sleep()                
             else : break
-            breakpoint()
+            ...
             
         defualt_wind_handles = self.driver.window_handles[0]
         def random_clicks_cet(obj):
-            breakpoint()
+            ...
             for _ in range(random.randint(0,4)): 
                 try:
                     self.driver.execute_script('document.querySelector("#__next > div:nth-child(6) > div > div:nth-child(2) > section > div.slick-slider.filter-Slider.hot-space-filters.home.slick-initialized > div > div > div:nth-child(54) > div > div").click()')

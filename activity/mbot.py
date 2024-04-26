@@ -31,6 +31,6 @@ activities_func_li = [
 random.shuffle(activities_func_li)
 
 for func in activities_func_li :
-    breakpoint()
+    ...
     func(bt.driver)
     ...
