@@ -5,7 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException,ElementNotInteractableException,NoSuchElementException,WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webdriver import WebDriver
-
+from dbb import add_data_with_view
+from datetime import datetime
 
 
 
@@ -41,22 +42,109 @@ class driver_class():
         self.options.add_argument("--enable-javascript")
         self.options.add_argument("--enable-popup-blocking")
         self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
-        # self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
+        self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
+        self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
 
-    def get_driver(self):
+    def get_driver(self,vpn = False):
         """Start webdriver and return state of it."""
+        
         from selenium import webdriver
         for _ in range(30):
             self.options = webdriver.ChromeOptions()
             self.driver_arguments()
             try:
                 self.driver = webdriver.Chrome(options=self.options)
+                
+                if vpn :
+                    method = random.randint(1,2)
+                    if method ==1:
+                        if not self.connect_touchvpn() :
+                            self.driver.quit()
+                        else : 
+                            break
+
+                    elif method == 2:
+                        if not self.connect_turbo() :
+                            self.driver.quit()
+                        else : 
+                            break
+                    
                 break
             except Exception as e:
                 print(e)
+                
+        add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
         
         return self.driver
-    
+
+    def connect_touchvpn(self):
+        """ Will select any counrty from the following 
+            1. US
+            2. Canada
+            3. Russian Federation
+            4. Germany
+            5. Netherland (Removed and will not connect now)
+            6. UK
+        """
+        time.sleep(1)
+        window_handles = self.driver.window_handles
+        time.sleep(1)
+        self.driver.switch_to.window(window_handles[0])
+        self.driver.get('chrome-extension://bihmplhobchoageeokmgbdihknkjbknd/panel/index.html')
+        time.sleep(1)
+        self.driver.find_element(By.XPATH,'//*[@class="location"]').click()
+        time.sleep(3)
+        locations = self.driver.find_element(By.XPATH,'//*[@class="list"]')
+        time.sleep(1)
+        location = locations.find_elements(By.XPATH,'//*[@class="row"]')
+        location = [ i for i in location if not "Netherlands" == i.text]
+        location[random.randint(1,7)].click()
+        time.sleep(2)
+        self.driver.find_element(By.XPATH,'//*[@id="ConnectionButton"]').click()
+        wait = WebDriverWait(self.driver, 10)
+        try:
+            wait.until(EC.presence_of_element_located((By.XPATH, '//*[text()="Stop"]')))
+        except Exception as e:
+            print(f"Error: {e}")
+        connected = self.driver.find_element(By.XPATH,'//*[text()="Stop"]')
+        if connected:
+            return True
+        else:
+            return False
+
+    def connect_turbo(self):    
+        
+        country = ['Singapore','Germany','United Kingdom','United States']
+        country = country[random.randint(0,3)]
+        time.sleep(1)
+        window_handles = self.driver.window_handles
+        time.sleep(1)
+        self.driver.switch_to.window(window_handles[0])
+        time.sleep(1)
+        self.driver.get('chrome-extension://bnlofglpdlboacepdieejiecfbfpmhlb/popup/popup.html')
+        time.sleep(2)
+        location = self.driver.find_element(By.XPATH,'/html/body/div/div/div[4]/div[1]/div[3]')
+        if location:
+            location.click()
+            time.sleep(5)
+            searver_list = self.driver.find_element(By.XPATH,'/html/body/div/div/div[3]/div[1]/div[3]/div[2]/div')
+            time.sleep(1)
+            countrys = searver_list.find_elements(By.XPATH,'.//div')
+            countrys[random.randint(0,3)].click()
+        
+        wait = WebDriverWait(self.driver, 10)
+        try:
+            wait.until(EC.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
+        except Exception as e:
+            self.driver.find_element(By.XPATH,'//*[@class="start-btn"]').click()
+            wait.until(EC.presence_of_element_located((By.XPATH, '//*[text()="CONNECTED"]')))
+        connected = self.driver.find_element(By.XPATH,'//*[text()="CONNECTED"]')
+        if connected:
+            return True
+        else:
+            return False
+        
+        
     def find_element(self, element, locator, locator_type=By.XPATH,
             page=None, timeout=10,
             condition_func=EC.presence_of_element_located,
