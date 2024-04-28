@@ -34,14 +34,13 @@ activities_func_li = [
 import argparse
 from concurrent import futures
 
-num_threads = 1
+num_threads = 10
 
 def main(vpn=False):
     active_threads = set()
 
     def start_new_thread():
         while True:
-            breakpoint()
             random.shuffle(activities_func_li)
             bt = Xana_bot(vpn=vpn)
             for func in activities_func_li :
