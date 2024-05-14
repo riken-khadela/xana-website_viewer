@@ -34,7 +34,7 @@ activities_func_li = [
 import argparse
 from concurrent import futures
 
-num_threads = 10
+num_threads = 5
 
 def main(vpn=False):
     active_threads = set()
