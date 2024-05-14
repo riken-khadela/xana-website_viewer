@@ -25,7 +25,7 @@ class driver_class():
         self.options.add_argument('--mute-audio')
         self.options.add_argument("--ignore-gpu-blocklist")
         self.options.add_argument('--disable-dev-shm-usage')
-        self.options.add_argument('--headless')
+        # self.options.add_argument('--headless')
 
         prefs = {"credentials_enable_service": True,
                 'profile.default_content_setting_values.automatic_downloads': 1,
