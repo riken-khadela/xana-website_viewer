@@ -25,7 +25,7 @@ class driver_class():
         self.options.add_argument('--mute-audio')
         self.options.add_argument("--ignore-gpu-blocklist")
         self.options.add_argument('--disable-dev-shm-usage')
-        # self.options.add_argument('--headless')
+        self.options.add_argument('--headless')
 
         prefs = {"credentials_enable_service": True,
                 'profile.default_content_setting_values.automatic_downloads': 1,
@@ -42,8 +42,8 @@ class driver_class():
         self.options.add_argument("--enable-javascript")
         self.options.add_argument("--enable-popup-blocking")
         self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
-        self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
-        self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
+        # self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
+        # self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
 
     def get_driver(self,vpn = False):
         """Start webdriver and return state of it."""
