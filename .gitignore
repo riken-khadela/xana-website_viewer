@@ -2,7 +2,6 @@ env
 etc/*
 *.log
 __pycache__
-*.sh
 *.db
 etc
 apk
