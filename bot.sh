@@ -8,8 +8,8 @@ cd $PRJ_DIR
 pwd
 killall -9 python qemu-system-x86_64
 cd /home/rk/Desktop/xana-website_viewer/
-# git stash
-# git pull 
+git stash
+git pull 
 . env/bin/activate
 python activity/mbot.py
 
