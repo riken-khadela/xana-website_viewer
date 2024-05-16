@@ -22,8 +22,8 @@ m3u8-To-MP4==0.1.11
 numpy
 outcome==1.2.0
 packaging==24.0
-pandas==2.1.1
-py
+pandas
+py==1.11.0
 pyasn1==0.5.1
 pycparser==2.21
 pycryptodome==3.19.0
