@@ -98,7 +98,7 @@ if anydesk_id:
         
     
 message = MIMEText(body)
-message["Subject"] = f'PC number: {system_no} {subject}'
+message["Subject"] = f'PC number: {system_no} {subject} from xana web views'
 message["From"] = sender_email
 message["To"] = receiver_email
 message["Date"] = formatdate(localtime=True)
