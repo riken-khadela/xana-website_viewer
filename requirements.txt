@@ -19,11 +19,11 @@ iso8601==2.1.0
 kaitaistruct==0.10
 m3u8==3.6.0
 m3u8-To-MP4==0.1.11
-numpy==1.26.0
+numpy
 outcome==1.2.0
 packaging==24.0
 pandas==2.1.1
-py==1.11.0
+py
 pyasn1==0.5.1
 pycparser==2.21
 pycryptodome==3.19.0
