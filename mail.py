@@ -79,7 +79,9 @@ current_time = datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S %Z%z')
 body = body + f"\n\n{add_line}\nCurrent IST Time: {current_time}"
 subject = "test emails"
 anydesk_id = ''
-anydesk_id = get_anydesk_id()
+try :
+    anydesk_id = get_anydesk_id()
+except : ...
 print(anydesk_id,'-------------')
 
 try:
