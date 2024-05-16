@@ -9,7 +9,6 @@ cffi==1.16.0
 charset-normalizer==3.3.2
 chrome-cookiejar==0.1.0
 chromedriver-autoinstaller==0.6.2
-cryptography==42.0.5
 Django==5.0
 django-crontab==0.7.1
 exceptiongroup==1.1.3
