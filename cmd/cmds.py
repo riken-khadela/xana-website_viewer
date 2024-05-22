@@ -10,7 +10,7 @@ def check_cmds_pcname():
     if pcname not in gs_df.columns :
         gs_df[pcname] = pd.NaT
     update_in_google_sheet(worksheet,gs_df)
-
+check_cmds_pcname()
 
 gs_df, worksheet = return_google_sheet_df("xana sheet commands")
 
