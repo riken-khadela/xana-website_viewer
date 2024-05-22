@@ -20,7 +20,7 @@ class driver_class():
     def driver_arguments(self):
         self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage")
-        self.options.add_argument("--headless")  # Optional: run in headless mode
+        # self.options.add_argument("--headless")  # Optional: run in headless mode
         self.options.add_argument(f"--remote-debugging-port={9222 + random.randint(0,78)}")  # Unique port for each instance
         # self.base_path = os.getcwd()
         # self.download_path = os.path.join(os.getcwd(),'downloads')
