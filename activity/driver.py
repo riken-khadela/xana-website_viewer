@@ -94,7 +94,8 @@ class driver_class():
                 
         from selenium import webdriver
         for _ in range(30):
-            service = Service('/home/rk/workspace/xana-website_viewer/chromedriver')
+            os.path.join(os.getcwd(),'chromedriver')
+            service = Service(os.path.join(os.getcwd(),'chromedriver'))
             
             self.options = webdriver.ChromeOptions()
             self.driver_arguments()
