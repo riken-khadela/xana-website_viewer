@@ -14,7 +14,7 @@ def restart_anydesk_id():
     import subprocess
 
     # Command to restart AnyDesk with sudo
-    command = "sudo -S systemctl restart anydesk"
+    command = ""
     # Ask for the sudo password
     password = "1234"
     # Execute the command with sudo and provide the password

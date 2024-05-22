@@ -43,8 +43,9 @@ def main(vpn=False):
         while True:
             random.shuffle(activities_func_li)
             bt = Xana_bot(vpn=vpn)
-            for func in activities_func_li :
-                func(bt.driver)
+            if bt.driver :
+                for func in activities_func_li :
+                    func(bt.driver)
     
     # Start the initial threads
     with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:

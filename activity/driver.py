@@ -1,4 +1,4 @@
-import random, time, os
+import random, time, os, random
 from selenium.webdriver.support import expected_conditions as EC 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -18,43 +18,90 @@ class driver_class():
         self.time_running_on_sites = 0
     
     def driver_arguments(self):
-        self.base_path = os.getcwd()
-        self.download_path = os.path.join(os.getcwd(),'downloads')
-        self.options.add_argument('--lang=en')  
-        self.options.add_argument("--enable-webgl-draft-extensions")
-        self.options.add_argument('--mute-audio')
-        self.options.add_argument("--ignore-gpu-blocklist")
-        self.options.add_argument('--disable-dev-shm-usage')
-        # self.options.add_argument('--headless')
+        self.options.add_argument("--no-sandbox")
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--headless")  # Optional: run in headless mode
+        self.options.add_argument(f"--remote-debugging-port={9222 + random.randint(0,78)}")  # Unique port for each instance
+        # self.base_path = os.getcwd()
+        # self.download_path = os.path.join(os.getcwd(),'downloads')
+        # self.options.add_argument('--lang=en')  
+        # self.options.add_argument("--enable-webgl-draft-extensions")
+        # self.options.add_argument('--mute-audio')
+        # self.options.add_argument("--ignore-gpu-blocklist")
+        # self.options.add_argument('--disable-dev-shm-usage')
+        # # self.options.add_argument('--headless')
 
-        prefs = {"credentials_enable_service": True,
-                'profile.default_content_setting_values.automatic_downloads': 1,
-                "download.default_directory": "/dev/null",
-            'download.prompt_for_download': False, 
-            'download.directory_upgrade': True,
-            'safebrowsing.enabled': True ,
-            "profile.password_manager_enabled": True}
-        self.options.add_experimental_option("prefs", prefs)
-        self.options.add_argument('--no-sandbox')
-        self.options.add_argument('--start-maximized')    
-        self.options.add_argument('--disable-dev-shm-usage')
-        self.options.add_argument("--ignore-certificate-errors")
-        self.options.add_argument("--enable-javascript")
-        self.options.add_argument("--enable-popup-blocking")
-        self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
+        # prefs = {"credentials_enable_service": True,
+        #         'profile.default_content_setting_values.automatic_downloads': 1,
+        #         "download.default_directory": "/dev/null",
+        #     'download.prompt_for_download': False, 
+        #     'download.directory_upgrade': True,
+        #     'safebrowsing.enabled': True ,
+        #     "profile.password_manager_enabled": True}
+        # self.options.add_experimental_option("prefs", prefs)
+        # self.options.add_argument('--no-sandbox')
+        # self.options.add_argument('--start-maximized')    
+        # self.options.add_argument('--disable-dev-shm-usage')
+        # self.options.add_argument("--ignore-certificate-errors")
+        # self.options.add_argument("--enable-javascript")
+        # self.options.add_argument("--enable-popup-blocking")
+        # self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
         # self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
         # self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
 
-    def get_driver(self,vpn = False):
+    def get_driver(self,instance_id,vpn = False):
         """Start webdriver and return state of it."""
         
+        
+        
+        from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.chrome.service import Service
+        from selenium import webdriver
+        
+        # options = Options()
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
+        # # options.add_argument("--headless")  # Optional: run in headless mode
+        # options.add_argument(f"--remote-debugging-port={9222 + instance_id}")  # Unique port for each instance
+        # # options.add_argument(f"--user-data-dir=/tmp/chrome_profile_{instance_id}")  # Unique profile for each instance
+
+        # service = Service('/home/rk/workspace/xana-website_viewer/chromedriver')
+        # retries = 3
+        # driver = ''
+        # for attempt in range(retries):
+        #     try:
+        #         driver = webdriver.Chrome(service=service, options=options)
+        #         driver.set_page_load_timeout(60)
+        #         driver.set_script_timeout(60)
+        #         driver.get('http://google.com')
+        #         driver.get('http://facebook.com')
+        #         driver.get('https://surfshark.com/download/chrome/onboarding')
+        #         print(f"Instance {instance_id}: {driver.title}")
+        #         break
+        #     except Exception as e:
+        #         print(f"Instance {instance_id} encountered an error: {e}")
+        #         if attempt < retries - 1:
+        #             print(f"Retrying... ({attempt + 1}/{retries})")
+        #             time.sleep(5)  # Wait before retrying
+        #         else:
+        #             print(f"Instance {instance_id} failed after {retries} attempts")
+        #             driver.quit()
+        #             if retries == (retries - 1) :
+        #                 return
+            
+        # return driver
+                    
+                
         from selenium import webdriver
         for _ in range(30):
+            service = Service('/home/rk/workspace/xana-website_viewer/chromedriver')
+            
             self.options = webdriver.ChromeOptions()
             self.driver_arguments()
             try:
-                self.driver = webdriver.Chrome(options=self.options)
-                
+                self.driver = webdriver.Chrome(service=service,options=self.options)
+                self.driver.set_page_load_timeout(60)
+                self.driver.set_script_timeout(60)
                 if vpn :
                     method = random.randint(1,2)
                     if method ==1:
@@ -72,7 +119,7 @@ class driver_class():
                 break
             except Exception as e:
                 print(e)
-                
+        
         add_data_with_view(datetime.now().strftime("%d/%m/%Y"), True)
         
         return self.driver
