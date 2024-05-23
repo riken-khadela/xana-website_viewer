@@ -100,7 +100,7 @@ class driver_class():
             self.options = webdriver.ChromeOptions()
             self.driver_arguments()
             try:
-                self.driver = webdriver.Chrome(service=service,options=self.options)
+                self.driver = webdriver.Chrome(options=self.options)
                 self.driver.set_page_load_timeout(60)
                 self.driver.set_script_timeout(60)
                 if vpn :
