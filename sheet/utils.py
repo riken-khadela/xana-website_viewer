@@ -81,7 +81,6 @@ def get_this_pc_today_view():
         return False
     
 def update_in_google_sheet(worksheet,gs_df):
-    worksheet.clear()
     set_with_dataframe(worksheet, gs_df)
     
     

@@ -117,7 +117,6 @@ def is_date_CONFIRMED(date_string, time_dayss, date_format='%d/%m/%Y'):
 #         return False
     
 def update_in_google_sheet(worksheet,gs_df):
-    worksheet.clear()
     set_with_dataframe(worksheet, gs_df)
     
     
