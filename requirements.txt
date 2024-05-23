@@ -26,11 +26,11 @@ iso8601==2.1.0
 kaitaistruct==0.10
 m3u8==3.6.0
 m3u8-To-MP4==0.1.11
-numpy==1.26.4
+numpy
 oauthlib==3.2.2
 outcome==1.2.0
 packaging==24.0
-pandas==2.2.2
+pandas
 py==1.11.0
 pyasn1==0.5.1
 pyasn1_modules==0.4.0
