@@ -1,6 +1,7 @@
 import threading
 import time
 import random
+from numpy import int256
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -61,7 +62,7 @@ def random_browsing():
                 "download_restrictions": 3  # Block all downloads
             }
             options.add_experimental_option("prefs", prefs)
-            driver = uc.Chrome(options=options, version_main=get_google_chrome_version())
+            driver = uc.Chrome(options=options, version_main=int256(get_google_chrome_version()))
             driver.get("https://xana.net/")
             # Ensure the page is fully loaded
             time.sleep(5)
