@@ -31,6 +31,7 @@ activities_func_li = [
     ] 
 
 
+<<<<<<< HEAD
 
 import argparse
 from concurrent import futures
@@ -70,3 +71,8 @@ if __name__ == "__main__":
     create_db_ifnot()
     main(vpn=args.vpn)
                 
+=======
+for func in activities_func_li :
+    func(bt.driver)
+    ...
+>>>>>>> 49bdd2c ( rm       breakpoint()

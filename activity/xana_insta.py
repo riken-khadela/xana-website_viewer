@@ -88,7 +88,10 @@ class xana_net(driver_class):
         
     
     def xana_youtube_activites(self):
+<<<<<<< HEAD
         ...
+=======
+>>>>>>> 49bdd2c ( rm       breakpoint()
         self.videos_ele_li = []
         if self.find_element('Instagram link',"//a[@href='https://www.instagram.com/xanametaverse/']"):
             self.hover_on_an_element(self.find_element('Instagram link',"//a[@href='https://www.instagram.com/xanametaverse/']"))
