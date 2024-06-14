@@ -11,7 +11,6 @@ from datetime import datetime
 
 
 
-
 class driver_class():
     def __init__(self) -> None:
         self.time_running_on_sites = 0

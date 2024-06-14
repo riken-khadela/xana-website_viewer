@@ -9,6 +9,8 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from dbb import add_data_with_view
 import datetime
+from .utils import get_google_chrome_version
+
 
 # Function to check if GA tracking code is present
 def check_ga_loaded(driver):
@@ -39,7 +41,7 @@ def random_browsing():
                 "download_restrictions": 3  # Block all downloads
             }
             options.add_experimental_option("prefs", prefs)
-            driver = uc.Chrome(options=options, version_main=123)
+            driver = uc.Chrome(options=options, version_main=get_google_chrome_version())
             driver.get("https://xana.net/")
             # Ensure the page is fully loaded
             time.sleep(5)
