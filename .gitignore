@@ -10,3 +10,4 @@ images
 temp
 logs
 *.md
+profiles/*

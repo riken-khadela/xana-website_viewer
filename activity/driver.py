@@ -14,10 +14,11 @@ from datetime import datetime
 
 class driver_class():
     def __init__(self) -> None:
-        
         self.time_running_on_sites = 0
     
     def driver_arguments(self):
+        self.profile_dir = os.path.join(os.getcwd(),'profiles',str(random.randint(100000,10000000)))
+        
         self.base_path = os.getcwd()
         self.download_path = os.path.join(os.getcwd(),'downloads')
         self.options.add_argument('--lang=en')  
@@ -42,6 +43,7 @@ class driver_class():
         self.options.add_argument("--enable-javascript")
         self.options.add_argument("--enable-popup-blocking")
         self.options.add_argument(f"download.default_directory={self.base_path}/downloads")
+        self.options.add_argument(f"user-data-dir={self.profile_dir}")
         # self.options.add_extension(r'./Touch-VPNSecure-and-unlimited-VPN-proxy.crx')
         # self.options.add_extension(r'./Turbo-VPNSecure-Free-VPN-Proxy.crx')
 

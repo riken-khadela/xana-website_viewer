@@ -14,6 +14,6 @@ killall -9 python qemu-system-x86_64
 
 # update code
 # git checkout old-insta-rk
-git stash
-git pull
+# git stash
+# git pull
 python activity/mbot.py

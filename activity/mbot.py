@@ -6,7 +6,7 @@ from xana_twitter import run_xana_twitter_activities
 from xana_youtube import run_xana_youtube_activities
 from xana_discord import run_xana_discord_activities
 from dbb import create_db_ifnot
-import random
+import random, os
 views_links = [
     "https://xana.net/app",
     "https://xana.net/",
@@ -14,7 +14,9 @@ views_links = [
 
 class Xana_bot(driver_class):
     def __init__(self,vpn=False) -> None:
+        # self.profile_dir = os.path.join(os.getcwd(),'profiles',str(random.randint(100000,10000000)))
         self.driver =self.get_driver(vpn)
+        
         self.driver.get(views_links[-1])
         self.random_sleep()
         pass
@@ -26,15 +28,14 @@ activities_func_li = [
         run_xana_twitter_activities,
         run_xana_youtube_activities,
         run_xana_discord_activities,
-    ]
-
+    ] 
 
 
 
 import argparse
 from concurrent import futures
 
-num_threads = 10
+num_threads = 1
 
 def main(vpn=False):
     active_threads = set()
@@ -45,7 +46,9 @@ def main(vpn=False):
             bt = Xana_bot(vpn=vpn)
             for func in activities_func_li :
                 func(bt.driver)
-    
+            os.remove(bt.profile_dir)
+            breakpoint()
+
     # Start the initial threads
     with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         for i in range(num_threads):

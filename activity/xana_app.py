@@ -130,7 +130,7 @@ def run_xana_app_activities(driver):
     def Xana_app_activities():
         bt.main()
     total_time_elsped = 0
-    recommanded_timer = random.randint(420,480)
+    recommanded_timer = random.randint(15,80)
     print('recommanded timer :',recommanded_timer)
     while total_time_elsped < recommanded_timer:
         time_elsped, fun_result = Xana_app_activities()
