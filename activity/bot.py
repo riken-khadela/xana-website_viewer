@@ -46,7 +46,6 @@ def check_ga_loaded(driver):
 # Function to perform random scrolling and clicking
 def random_browsing():
     while True:
-        add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
 
         try:
             options = uc.ChromeOptions()
@@ -63,6 +62,8 @@ def random_browsing():
             options.add_experimental_option("prefs", prefs)
             driver = uc.Chrome(options=options, version_main=int(get_google_chrome_version()))
             driver.get("https://xana.net/")
+            add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
+            
             # Ensure the page is fully loaded
             time.sleep(5)
             if not check_ga_loaded(driver):
@@ -91,14 +92,25 @@ def random_browsing():
             if 'driver' in locals():
                 driver.quit()
 # Function to run browsing in threads
+
+num_threads = 5
+
+
 def start_threads():
-    threads = []
-    for _ in range(10):
-        thread = threading.Thread(target=random_browsing)
-        threads.append(thread)
-        thread.start()
-    for thread in threads:
-        thread.join()
+    active_threads = set()
+
+    from concurrent import futures
+    with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        for i in range(num_threads):
+            future = executor.submit(random_browsing)
+            active_threads.add(future)
+            
+    # for _ in range(10):
+    #     thread = threading.Thread(target=random_browsing)
+    #     threads.append(thread)
+    #     thread.start()
+    # for thread in threads:
+    #     thread.join()
         
 # Main loop to repeat the process
 while True:
