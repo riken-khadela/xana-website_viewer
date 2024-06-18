@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from dbb import add_data_with_view
 import datetime
 
-
+driver = ''
 import subprocess
 
 def get_cmd_output(command : str = ''):
@@ -43,11 +43,61 @@ def check_ga_loaded(driver):
     except TimeoutException:
         print("GA tracking code not found.")
         return False
+    
+    
+
+def find_on_google():
+    
+    driver.get('https://www.google.com/')
+    
+def find_on_insta():
+    old_windows = driver.window_handles
+    
+    driver.get('https://www.instagram.com/xanametaverse/')
+    a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), 'linktr.ee/xanametaverse')]")
+    a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), '🌎 XANA Website")
+    if a_tag :
+        a_tag[0].click()
+    else : return
+    
+    new_windows = driver.window_handles
+    for new_win in new_windows : 
+        if new_win  in old_windows :
+            driver.switch_to.window(new_win)
+            driver.close()
+            
+    driver.switch_to.window(driver.window_handles[-1])
+    website_tag = driver.find_elements(By.XPATH,"//a[contains(@href, 'https://xana.net/?utm_source=linktree')]")
+    if not website_tag  : return
+    
+    website_tag = website_tag[-1]
+    try:
+        ActionChains(driver).move_to_element(website_tag).click().perform()
+    except WebDriverException:
+        pass
+    
+
+    
+    
+def click_on_stite():
+    find_on_insta()
+    breakpoint()
+    if not 'driver' in locals():
+        return
+    if not driver:
+        return
+    
+    
+    breakpoint()
+    
+    
 # Function to perform random scrolling and clicking
 def random_browsing():
     while True:
 
         try:
+            global driver
+            
             options = uc.ChromeOptions()
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
@@ -60,7 +110,9 @@ def random_browsing():
                 "download_restrictions": 3  # Block all downloads
             }
             options.add_experimental_option("prefs", prefs)
+            
             driver = uc.Chrome(options=options, version_main=int(get_google_chrome_version()))
+            click_on_stite()
             driver.get("https://xana.net/")
             add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
             
@@ -93,7 +145,7 @@ def random_browsing():
                 driver.quit()
 # Function to run browsing in threads
 
-num_threads = 5
+num_threads = 1
 
 
 def start_threads():
