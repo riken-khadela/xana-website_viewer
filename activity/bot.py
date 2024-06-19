@@ -54,8 +54,8 @@ def find_on_insta():
     old_windows = driver.window_handles
     
     driver.get('https://www.instagram.com/xanametaverse/')
+    time.sleep(10)
     a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), 'linktr.ee/xanametaverse')]")
-    a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), '🌎 XANA Website")
     if a_tag :
         a_tag[0].click()
     else : return
@@ -65,14 +65,17 @@ def find_on_insta():
         if new_win  in old_windows :
             driver.switch_to.window(new_win)
             driver.close()
-            
+    
     driver.switch_to.window(driver.window_handles[-1])
     website_tag = driver.find_elements(By.XPATH,"//a[contains(@href, 'https://xana.net/?utm_source=linktree')]")
     if not website_tag  : return
     
     website_tag = website_tag[-1]
+    
+    breakpoint()
     try:
-        ActionChains(driver).move_to_element(website_tag).click().perform()
+        ActionChains(driver).move_to_element(website_tag)
+        website_tag.click()
     except WebDriverException:
         pass
     
