@@ -214,18 +214,7 @@ class WebDriverUtility:
         
         
 
-num_threads = 1
 
-
-def start_threads():
-    active_threads = set()
-
-    from concurrent import futures
-    with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-        for i in range(num_threads):
-            future = executor.submit(random_browsing)
-            active_threads.add(future)
-            
 
 # while True:
 #     start_threads()
@@ -324,7 +313,8 @@ class xana_viewer(WebDriverUtility):
         self.switch_to_tab(-1)
         self.scroll_smoothly(max_scroll=random.randint(6,10))
 
-    def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME, number=1):            
+    def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME, number=1):
+        number = len(element_list) if len(element_list) < number else number
         for i in range(number):
             class_name = random.choice(element_list)
             lanchpad = self.find_elements(class_name, selector)
@@ -426,7 +416,20 @@ class xana_viewer(WebDriverUtility):
         self.close_driver()
         
         
-        
-xana = xana_viewer()
-xana.work()
-        
+def run_script():
+    xana = xana_viewer()
+    xana.work()
+
+num_threads = 3
+
+
+def start_threads():
+    active_threads = set()
+
+    from concurrent import futures
+    with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        for i in range(num_threads):
+            future = executor.submit(run_script)
+            active_threads.add(future)
+
+start_threads()
