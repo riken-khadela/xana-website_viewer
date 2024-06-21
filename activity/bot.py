@@ -420,6 +420,9 @@ class xana_viewer(WebDriverUtility):
         self.close_driver()
         
         
+def run_script():
+    xana = xana_viewer()
+    xana.work()
 
 num_threads = 3
 
@@ -430,8 +433,7 @@ def start_threads():
     from concurrent import futures
     with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         for i in range(num_threads):
-            xana = xana_viewer()
-            future = executor.submit(xana.work())
+            future = executor.submit(run_script)
             active_threads.add(future)
 
 start_threads()
