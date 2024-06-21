@@ -47,6 +47,7 @@ class WebDriverUtility:
         if element:
             element.send_keys(text)
 
+
     def scroll_to_element(self, element):
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
@@ -124,6 +125,19 @@ class WebDriverUtility:
         if not successful:
             print("Attempting final click using JavaScript.")
             self.click_with_javascript(element)
+            
+
+    def simulate_human_movement(self):
+        print('start human movement')
+        action = ActionChains(self.driver)
+        
+        random_x = random.randint(200, 1200)  # random x point
+        random_y = random.randint(200, 1200)  # random y point
+
+        action.move_by_offset(random_x, random_y).perform()
+
+        time.sleep(random.uniform(0.5, 1.5))  # random delay between 0.5 to 1.5 sec
+
 
     def refresh_element(self, element):
         # Re-find the element in the DOM to avoid StaleElementReferenceException
@@ -142,8 +156,11 @@ class WebDriverUtility:
     def get_all_tabs(self):
         return self.driver.window_handles
     
-    def switch_to_tab(self, window_name:str):
-        self.driver.switch_to.window(window_name)
+    def switch_to_tab(self, window_name):
+        if isinstance(window_name, int):
+            self.driver.switch_to.window(self.driver.window_handles[window_name])
+        else:
+            self.driver.switch_to.window(window_name)
 
     def switch_to_iframe(self, frame_reference: Union[str, int, WebElement]):
         self.driver.switch_to.frame(frame_reference)
@@ -168,13 +185,15 @@ class WebDriverUtility:
         """
         scroll_count = 0
         while scroll_count < max_scroll:
-            if direction == "down":
-                self.driver.execute_script("window.scrollBy(0, window.innerHeight/4);")
-            else:
-                self.driver.execute_script("window.scrollBy(0, -window.innerHeight/4);")
-            time.sleep(random.uniform(0.5, 1.5))  # Random sleep to mimic human behavior
+            try:
+                if direction == "down":
+                    self.driver.execute_script("window.scrollBy(0, window.innerHeight/4);")
+                else:
+                    self.driver.execute_script("window.scrollBy(0, -window.innerHeight/4);")
+                time.sleep(random.uniform(0.5, 1.5))  # Random sleep to mimic human behavior
+            except:pass
             scroll_count += 1
-
+            
     def load_cookies(self, load_path):
         """ Load cookies from a file and add them to the current session. """
         with open(load_path, 'r') as file:
@@ -192,139 +211,8 @@ class WebDriverUtility:
         self.driver.refresh()
         
         
-
-def get_cmd_output(command : str = ''):
-    try:
-        output = subprocess.check_output(
-            f'''google-chrome --version''',
-            shell=True
-        ).decode()
         
-        return output.replace('\n','').strip()
-                    
-    except subprocess.CalledProcessError as e:
-        print(f"Error: {e.output}")
-    return None
-    
-
-def get_google_chrome_version():
-    output = get_cmd_output(f'''google-chrome --version''')
-    return output.replace('Google Chrome ','').split('.')[0]
-    
-
-# Function to check if GA tracking code is present
-def check_ga_loaded(driver):
-    try:
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, "//script[contains(@src, 'googletagmanager.com/gtag/js') or contains(@src, 'google-analytics.com/analytics.js')]"))
-        )
-        print("GA tracking code found.")
-        return True
-    except TimeoutException:
-        print("GA tracking code not found.")
-        return False
-    
-    
-
-def find_on_google():
-    driver.get('https://www.google.com/')
-    
-    
-
-    
-def find_on_insta():
-    old_windows = driver.window_handles
-    
-    driver.get('https://www.instagram.com/xanametaverse/')
-    time.sleep(10)
-    a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), 'linktr.ee/xanametaverse')]")
-    if a_tag :
-        suppoter.ensure_click(a_tag[0])
-    else : return
-    
-    new_windows = driver.window_handles
-    for new_win in new_windows : 
-        if new_win  in old_windows :
-            driver.switch_to.window(new_win)
-            driver.close()
-
-    
-    driver.switch_to.window(driver.window_handles[-1])
-    website_tag = driver.find_elements(By.XPATH,"//a[contains(@href, 'https://xana.net/?utm_source=linktree')]")
-    suppoter.scroll_smoothly(max_scroll=2)
-    if not website_tag  : return
-    
-    website_tag = website_tag[-1]
-    time.sleep(random.uniform(0.5, 1.5))
-    suppoter.ensure_click(website_tag)
-    
-
-def nevigate_to_website():
-    
-    
-    
-    ...
-
-    
-    
-def click_on_stite():
-    find_on_insta()
-
-    
-# Function to perform random scrolling and clicking
-def random_browsing():
-    while True:
-
-        try:
-            global driver
-            global suppoter
-            options = uc.ChromeOptions()
-            options.add_argument("--no-sandbox")
-            options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--incognito")
-            options.add_argument(f"user-agent=Mozilla/5.0 (Windows NT {random.randint(6, 10)}.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.{random.randint(3000, 4000)}.87 Safari/537.36")
-            prefs = {
-                "download.prompt_for_download": True,  # Always ask for download location
-                "download.default_directory": "",  # Disable default directory for downloads
-                "download_restrictions": 3  # Block all downloads
-            }
-            options.add_experimental_option("prefs", prefs)
-            
-            driver = uc.Chrome(options=options, version_main=int(get_google_chrome_version()))
-            suppoter = WebDriverUtility(driver=driver)
-            click_on_stite()
-            driver.get("https://xana.net/")
-            add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
-            
-            # Ensure the page is fully loaded
-            time.sleep(5)
-            if not check_ga_loaded(driver):
-                driver.quit()
-                break
-            end_time = time.time() + 1 * 60  # 1 minute from now
-            while time.time() < end_time:
-                # Random scroll
-                scroll_height = driver.execute_script("return document.body.scrollHeight")
-                random_scroll = random.randint(0, scroll_height)
-                driver.execute_script(f"window.scrollTo(0, {random_scroll});")
-                # Random click
-                elements = driver.find_elements(By.XPATH, "//*")
-                if elements:
-                    element_to_click = random.choice(elements)
-                    try:
-                        ActionChains(driver).move_to_element(element_to_click).click().perform()
-                    except WebDriverException:
-                        pass
-                # Wait for a short random interval
-                time.sleep(random.uniform(0.5, 2))
-            driver.quit()
-            break  # Exit the loop if browsing completes successfully
-        except (TimeoutException, WebDriverException) as e:
-            print(f"An error occurred: {e}. Retrying...")
-            if 'driver' in locals():
-                driver.quit()
-# Function to run browsing in threads
+        
 
 num_threads = 1
 
@@ -348,7 +236,9 @@ def start_threads():
 class xana_viewer(WebDriverUtility):
     
     def __init__(self) -> None:
-        ...
+        self.referers = ['https://search.yahoo.com/', 'https://duckduckgo.com/', 'https://www.google.com/',
+            'https://www.bing.com/', 'https://t.co/', 'https://www.instagram.com/xanametaverse/']
+
     
     def get_driver(self):
         options = uc.ChromeOptions()
@@ -365,10 +255,22 @@ class xana_viewer(WebDriverUtility):
         options.add_experimental_option("prefs", prefs)
         
         self.driver = uc.Chrome(options=options, version_main=int(self.get_google_chrome_version()))
-
+            
+    def get_cmd_output(self, command : str = ''):
+        try:
+            output = subprocess.check_output(
+                command,
+                shell=True
+            ).decode()
+            
+            return output.replace('\n','').strip()
+                        
+        except subprocess.CalledProcessError as e:
+            print(f"Error: {e.output}")
+        return None
     
     def get_google_chrome_version(self):
-        output = get_cmd_output(f'''google-chrome --version''')
+        output = self.get_cmd_output(f'''google-chrome --version''')
         return output.replace('Google Chrome ','').split('.')[0]
     
     def check_ga_loaded(self,):
@@ -388,40 +290,143 @@ class xana_viewer(WebDriverUtility):
                 self.ensure_click(element_to_click)
             # Wait for a short random interval
             time.sleep(random.uniform(0.5, 2))
-
     
-    def by_insta(self):
+    def randomly_scroll(self):
+        print('start random scroll')
+        self.scroll_smoothly(random.choice(['up', 'down']))
+
+    def play_random_video(self):
+        video_tag = self.find_elements('video', By.TAG_NAME)
+        self.scroll_to_element(random.choice(video_tag))
+        self.random_sleep(30, 50)  
+        
+    def xana_nft_randomly_action(self ):
+        random_ele = ['style_collection-card__znXis', 'style_collection-card__PGcs0', 'style_nft-card__ZBQK6']
+        self.randomly_click_on_multiple_element(random_ele)
+
+    def xana_nftduel_randomly_action(self):
+        random_ele = ['card-2']
+        self.randomly_click_on_multiple_element(random_ele)
+
+    def xana_app_randomly_action(self):
+        random_ele = ['slick-slider']
+        self.randomly_click_on_multiple_element(random_ele,number= 4)
+
+    def xana_blog_randomly_action(self):
+        random_ele = ['c-tabList__button']
+        self.randomly_click_on_multiple_element(random_ele)
+        ul_tags = self.find_elements('//*[contains(@id, "post_list_tab")]')
+        for ul in ul_tags:
+            if ul.is_displayed():
+                li_tags = ul.find_elements(By.TAG_NAME, 'li')
+                self.ensure_click(random.choice(li_tags))
+                break
+        self.switch_to_tab(-1)
+        self.scroll_smoothly(max_scroll=random.randint(6,10))
+
+    def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME, number=1):            
+        for i in range(number):
+            class_name = random.choice(element_list)
+            lanchpad = self.find_elements(class_name, selector)
+            self.ensure_click(random.choice(lanchpad))
+            self.random_sleep(7,10) 
+
+        
+    def set_referer(self, url:str='' ):
+        urls = ['https://xana.net/app', 'https://xana.net/blog/', 'https://xana.net/nft', 'https://xana.net/nftduel/en/', 'https://xana.net/XANASUMMIT/']
+        if not url: url = random.choice(urls)
+        referer = random.choice(self.referers)
+        if referer:
+            # if 'search.yahoo.com' in referer:
+            #     self.navigate_to(referer)
+            #     self.random_sleep()
+            #     self.navigate_to('https://duckduckgo.com/')
+            #     self.random_sleep()
+            #     breakpoint()
+            #     self.driver.execute_script('''window.history.pushState({urlPath: arguments[0]}, '', arguments[0]);''', referer)
+            # else:
+            self.navigate_to(referer)
+            self.random_sleep()
+            self.driver.execute_script(
+                "window.location.href = '{}';".format(url))
+        else:
+            self.navigate_to(url)
+
+    def activity_for_xana_nft(self):
+        self.set_referer('https://xana.net/nft')
+        actions = [
+            # self.simulate_human_movement,
+            self.randomly_scroll,
+            self.xana_nft_randomly_action
+        ]
+
+        # Randomly choose an action and execute it
+        random.shuffle(actions)
+        for i in actions:
+            i()
+
+    def activity_for_xana_summit(self):
+        self.set_referer('https://xana.net/XANASUMMIT/')
+        actions = [
+            # self.simulate_human_movement,
+            self.randomly_scroll,
+            self.play_random_video
+        ]
+
+        # Randomly choose an action and execute it
+        random.shuffle(actions)
+        for i in actions:
+            i()
+
+    def activity_for_xana_nftduel(self):
+        self.set_referer('https://xana.net/nftduel/en/')
+        actions = [
+            # self.simulate_human_movement,
+            self.randomly_scroll,
+            self.xana_nftduel_randomly_action,
+            self.play_random_video
+        ]
+
+        # Randomly choose an action and execute it
+        random.shuffle(actions)
+        for i in actions:
+            i()
+
+    def activity_for_xana_app(self):
+        self.set_referer('https://xana.net/app')
+        actions = [
+            # self.simulate_human_movement,
+            self.randomly_scroll,
+            self.xana_app_randomly_action,
+            self.play_random_video
+        ]
+
+        # Randomly choose an action and execute it
+        random.shuffle(actions)
+        for i in actions:
+            i()
+        
+    def activity_for_xana_blog(self):
+        self.set_referer('https://xana.net/blog/')
+        actions = [
+            # self.simulate_human_movement,
+            self.randomly_scroll,
+            self.xana_blog_randomly_action,
+        ]
+
+        # Randomly choose an action and execute it
+        random.shuffle(actions)
+        for i in actions:
+            self.random_sleep()
+            i()
+    
+    def work(self):
         self.get_driver()
-        self.navigate_to('https://www.instagram.com/xanametaverse/')
-        old_windows = self.driver.current_window_handle
-        self.random_sleep()
-        a_tag = driver.find_elements(By.XPATH,"//*[contains(text(), 'linktr.ee/xanametaverse')]")
-        if a_tag :
-            self.ensure_click(a_tag[0])
-        else : return
-        
-        self.switch_to_tab(old_windows)
-        self.driver.close()
-        
-        self.switch_to_tab(self.driver.window_handles[-1])
-        website_tag = driver.find_elements(By.XPATH,"//a[contains(@href, 'https://xana.net/?utm_source=linktree')]")
-        self.scroll_smoothly(max_scroll=2)
-        if not website_tag  : return
-        
-        website_tag = website_tag[-1]
-        time.sleep(random.uniform(0.5, 1.5))
-        self.ensure_click(website_tag)
-        add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
-        
-        
-        if not self.check_ga_loaded():
-            driver.quit()
-            return
-        
-        self.random_activity()
+        self.activity_for_xana_app()
         self.close_driver()
         
-    def by_google(self):
         
         
-        ...
+xana = xana_viewer()
+xana.work()
+        
