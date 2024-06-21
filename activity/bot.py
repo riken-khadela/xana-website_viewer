@@ -1,10 +1,9 @@
-import threading
 import time
-import random
-import undetected_chromedriver as uc
-import time
+import datetime
 import random, json
 from typing import Union
+import undetected_chromedriver as uc
+from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,7 +12,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementClickInterceptedException, StaleElementReferenceException, TimeoutException, WebDriverException
 from dbb import add_data_with_view
-import datetime
 
 driver = ''
 import subprocess
@@ -209,17 +207,6 @@ class WebDriverUtility:
 
     def refresh_driver(self):
         self.driver.refresh()
-        
-        
-        
-        
-
-
-
-# while True:
-#     start_threads()
-#     time.sleep(1)  # Wait a short while before starting again
-    
     
     
 class xana_viewer(WebDriverUtility):
@@ -227,6 +214,8 @@ class xana_viewer(WebDriverUtility):
     def __init__(self) -> None:
         self.referers = ['https://search.yahoo.com/', 'https://duckduckgo.com/', 'https://www.google.com/',
             'https://www.bing.com/', 'https://t.co/', 'https://www.instagram.com/xanametaverse/']
+        self.user_agent = UserAgent()
+
 
     
     def get_driver(self):
@@ -235,7 +224,7 @@ class xana_viewer(WebDriverUtility):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--incognito")
-        options.add_argument(f"user-agent=Mozilla/5.0 (Windows NT {random.randint(6, 10)}.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.{random.randint(3000, 4000)}.87 Safari/537.36")
+        options.add_argument(f"--user-agent={self.user_agent.random}")
         prefs = {
             "download.prompt_for_download": True,  # Always ask for download location
             "download.default_directory": "",  # Disable default directory for downloads
@@ -282,24 +271,37 @@ class xana_viewer(WebDriverUtility):
     
     def randomly_scroll(self):
         print('start random scroll')
-        self.scroll_smoothly(random.choice(['up', 'down']))
+        direction = random.choice(['up', 'down'])
+        if direction == 'up':
+            self.scroll_smoothly(direction)
+            self.scroll_smoothly(max_scroll=6)
+        else:
+            self.scroll_smoothly(direction)
 
     def play_random_video(self):
+        print('start play video')
         video_tag = self.find_elements('video', By.TAG_NAME)
         self.scroll_to_element(random.choice(video_tag))
         self.random_sleep(30, 50)  
         
     def xana_nft_randomly_action(self ):
         random_ele = ['style_collection-card__znXis', 'style_collection-card__PGcs0', 'style_nft-card__ZBQK6']
-        self.randomly_click_on_multiple_element(random_ele)
+        for i in random_ele:
+            self.randomly_click_on_multiple_element(random_ele)
+            self.random_sleep(7,10)
+            self.switch_to_tab(0)
 
     def xana_nftduel_randomly_action(self):
         random_ele = ['card-2']
         self.randomly_click_on_multiple_element(random_ele)
+        self.random_sleep(7,10)
 
     def xana_app_randomly_action(self):
         random_ele = ['slick-slider']
-        self.randomly_click_on_multiple_element(random_ele,number= 4)
+        for i in range(4):
+            self.randomly_click_on_multiple_element(random_ele)
+            if  self.driver.current_url !=  'https://xana.net/app' :
+                self.driver.back()
 
     def xana_blog_randomly_action(self):
         random_ele = ['c-tabList__button']
@@ -313,13 +315,11 @@ class xana_viewer(WebDriverUtility):
         self.switch_to_tab(-1)
         self.scroll_smoothly(max_scroll=random.randint(6,10))
 
-    def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME, number=1):
-        number = len(element_list) if len(element_list) < number else number
-        for i in range(number):
-            class_name = random.choice(element_list)
-            lanchpad = self.find_elements(class_name, selector)
-            self.ensure_click(random.choice(lanchpad))
-            self.random_sleep(7,10) 
+    def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME):
+        class_name = random.choice(element_list)
+        lanchpad = self.find_elements(class_name, selector)
+        self.ensure_click(random.choice(lanchpad))
+        self.random_sleep(7,10) 
 
         
     def set_referer(self, url:str='' ):
@@ -411,14 +411,14 @@ class xana_viewer(WebDriverUtility):
             i()
     
     def work(self):
+        all_fun = [self.activity_for_xana_app, self.activity_for_xana_blog, self.activity_for_xana_nft, self.activity_for_xana_nftduel, self.activity_for_xana_summit]
         self.get_driver()
-        self.activity_for_xana_app()
+        x = random.choice(all_fun)
+        x()
+        add_data_with_view(datetime.datetime.now().strftime("%d/%m/%Y"), True)
         self.close_driver()
         
         
-def run_script():
-    xana = xana_viewer()
-    xana.work()
 
 num_threads = 3
 
@@ -429,7 +429,8 @@ def start_threads():
     from concurrent import futures
     with futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         for i in range(num_threads):
-            future = executor.submit(run_script)
+            xana = xana_viewer()
+            future = executor.submit(xana.work())
             active_threads.add(future)
 
 start_threads()
