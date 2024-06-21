@@ -435,5 +435,5 @@ def start_threads():
         for i in range(num_threads):
             future = executor.submit(run_script)
             active_threads.add(future)
-
-start_threads()
+while True:
+    start_threads()
