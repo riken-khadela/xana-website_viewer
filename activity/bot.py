@@ -318,8 +318,9 @@ class xana_viewer(WebDriverUtility):
     def randomly_click_on_multiple_element(self, element_list=[], selector=By.CLASS_NAME):
         class_name = random.choice(element_list)
         lanchpad = self.find_elements(class_name, selector)
-        self.ensure_click(random.choice(lanchpad))
-        self.random_sleep(7,10) 
+        if lanchpad:
+            self.ensure_click(random.choice(lanchpad))
+            self.random_sleep(7,10) 
 
         
     def set_referer(self, url:str='' ):
